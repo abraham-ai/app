@@ -1,16 +1,14 @@
-//import './App.css';
 import axios from 'axios'
 import React, {useState, useCallback} from 'react';
-import { Tabs } from 'antd';
+import {Tabs} from 'antd';
 
 const GATEWAY_URL = "https://gateway-test.abraham.ai";
 const MINIO_URL = "https://minio.aws.abraham.fun";
 const MINIO_BUCKET = "creations-stg";
 
 
-
 function App() {
-  const [images, setImages] = useState([]);
+  // const [images, setImages] = useState([]);
 
   async function submitPrediction(config, resultId) {
     const apiKey = document.querySelector("input[name=apiKey]").value;
@@ -40,6 +38,7 @@ function App() {
     let prediction_id = responseR.data;
     console.log(`job submitted, task id ${prediction_id}`);
     document.querySelector("progressReal2Real")
+    
     // update progress text span
     let progress = document.querySelector(`#progress${resultId}`);
     progress.innerHTML = `Generating ${prediction_id}...`;
@@ -76,6 +75,38 @@ function App() {
       return false;
     }
     return true;
+  }
+  
+  async function onClickMyCreations() {
+    console.log("TBD")
+  }
+
+  async function onClickRemix() {
+    // const initimgurl1 = document.querySelector("input[name=initimgurl1]").value;
+    // const initimgurl2 = document.querySelector("input[name=initimgurl2]").value;
+
+    // const width = parseInt(document.querySelector("input[name=rwidth]").value);
+    // const height = parseInt(document.querySelector("input[name=rheight]").value);
+    // const numframes = parseInt(document.querySelector("input[name=rnumframes]").value);
+
+    // if (!checkDimensions(width, height)) {
+    //   return;
+    // }
+
+    console.log("TBD");
+
+    let config = {
+      mode: "generate", 
+      text_input: "remix",
+      seed: 1e8 * Math.random(),
+      sampler: "klms",
+      scale: 10.0,
+      steps: 60, 
+      width: width,
+      height: height
+    }
+    
+    await submitPrediction(config, "Remix");
   }
   
   async function onClickGenerate() {
@@ -209,6 +240,10 @@ function App() {
             API Key: <input type="text" style={{fontSize: "1.05em", width: "300px"}} name="apiKey" placeholder="API Key" required />
             <br/>&nbsp;<br/>
             API Secret: <input type="text" style={{fontSize: "1.05em", width: "300px"}} name="apiSecret" placeholder="API Secret" required />
+            <br/>&nbsp;<br/>
+            <button style={{fontSize: "1.1em", width: "200px"}} onClick={onClickMyCreations}>Get my data</button>
+            <br/>&nbsp;<br/>
+            <hr/>
           </div>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Generate" key="2">
@@ -225,7 +260,23 @@ function App() {
             <img alt="" id="resultGenerate" />          
           </div>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Interpolate" key="3">
+        <Tabs.TabPane tab="Remix" key="3">
+          <div>
+            {/* <br/>&nbsp;<br/>
+            <span style={{fontSize:"32px"}}>... or ...</span> */}
+            <br/>&nbsp;<br/>
+            Init Img URL: <input type="text" style={{fontSize: "1.2em", width: "1080px"}} name="rminitimgurl1" placeholder="" required />
+            <br/>&nbsp;<br/>
+            &nbsp;Width: <input type="text" style={{fontSize: "1.2em", width: "100px"}} name="rmwidth" defaultValue="512" required />
+            &nbsp;Height: <input type="text" style={{fontSize: "1.2em", width: "100px"}} name="rmheight" defaultValue="512" required />
+            <br/>&nbsp;<br/>
+            <button style={{fontSize: "1.1em", width: "200px"}} onClick={onClickRemix}>Generate Remix</button>
+            <div id="progressRemix"></div>
+            <br/>&nbsp;<br/>
+            <img alt="" id="resultRemix" />
+          </div>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Interpolate" key="4">
           <div>
             <br/>&nbsp;<br/>
             Prompt 1: <input type="text" style={{fontSize: "1.2em", width: "1080px"}} name="prompt1" placeholder="Prompt" required />
@@ -239,16 +290,15 @@ function App() {
             <button style={{fontSize: "1.1em", width: "200px"}} onClick={onClickInterpolate}>Interpolate</button>
             <br/>&nbsp;<br/>
             <div id="progressInterpolate"></div>
-            {/* <img alt="" id="resultInterpolate" /> */}
             <video id="resultInterpolate" controls autoplay loop />
 
           </div>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Real2Real" key="4">
+        <Tabs.TabPane tab="Real2Real" key="5">
           <div>
             {/* <br/>&nbsp;<br/>
-            <span style={{fontSize:"32px"}}>... or ...</span>
-            <br/>&nbsp;<br/> */}
+            <span style={{fontSize:"32px"}}>... or ...</span> */}
+            <br/>&nbsp;<br/>
             Init Img URL 1: <input type="text" style={{fontSize: "1.2em", width: "1080px"}} name="initimgurl1" placeholder="" required />
             <br/>&nbsp;<br/>
             Init Img URL 2: <input type="text" style={{fontSize: "1.2em", width: "1080px"}} name="initimgurl2" placeholder="" required />
@@ -261,8 +311,7 @@ function App() {
             <div id="progressReal2Real"></div>
             <br/>&nbsp;<br/>
             {/* <img alt="" id="resultReal2Real" /> */}
-            <video id="resultReal2Real" controls autoPlay loop />
-            
+            <video id="resultReal2Real" controls autoPlay loop />            
           </div>
         </Tabs.TabPane>
       </Tabs>
