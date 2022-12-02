@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, {useState, useCallback} from 'react';
 import {Tabs} from 'antd';
 
-const GATEWAY_URL = "https://gateway-test.abraham.ai";
+const GATEWAY_URL = "https://gateway-test.abraham.ai"; //"https://app.dev.aws.abraham.fun"
 const MINIO_URL = "https://minio.aws.abraham.fun";
 const MINIO_BUCKET = "creations-stg";
 
@@ -19,10 +19,11 @@ function App() {
       return;
     }
 
-    const authData = {"apiKey": apiKey, "apiSecret": apiSecret};    
+    const authData = {"apiKey": apiKey, "apiSecret": apiSecret};        
 
     // get auth token
     let responseS = await axios.post(GATEWAY_URL+'/sign_in', authData);
+    console.log(responseS)
     const authToken = responseS.data.authToken;
 
     const request = {
@@ -32,9 +33,13 @@ function App() {
       "config": config,
       "metadata": null
     }
-
+    console.log(request)
     // start prediction
+    console.log(GATEWAY_URL+'/predictions')
     let responseR = await axios.post(GATEWAY_URL+'/request', request)
+    console.log("got response")
+    console.log(responseR)
+    console.log(responseR.data)
     let prediction_id = responseR.data;
     console.log(`job submitted, task id ${prediction_id}`);
     document.querySelector("progressReal2Real")
@@ -48,6 +53,7 @@ function App() {
       let response = await axios.post(GATEWAY_URL+'/fetch', {
         "taskIds": [prediction_id]
       });
+      console.log(response.data)
       let {status, output} = response.data[0];
       if (status === 'complete') {
         let outputUrl = `${MINIO_URL}/${MINIO_BUCKET}/${output}`;
