@@ -53,8 +53,14 @@ function App() {
       let response = await axios.post(GATEWAY_URL+'/fetch', {
         "taskIds": [prediction_id]
       });
+      console.log("=============")
       console.log(response.data)
       let {status, output} = response.data[0];
+      for (var i=0; i<response.data.length; i++) {
+        console.log(response.data[i])
+        console.log("-----")
+      }
+      console.log("=============")
       if (status === 'complete') {
         let outputUrl = `${MINIO_URL}/${MINIO_BUCKET}/${output}`;
         document.querySelector(`#result${resultId}`).src = outputUrl;
@@ -91,7 +97,7 @@ function App() {
     const initimgurl1 = document.querySelector("input[name=rminitimgurl1]").value;
     const width = parseInt(document.querySelector("input[name=rmwidth]").value);
     const height = parseInt(document.querySelector("input[name=rmheight]").value);
-
+    console.log("remix", width, height);
     if (!checkDimensions(width, height)) {
       return;
     }
@@ -104,6 +110,7 @@ function App() {
       init_image_data: initimgurl1,
       seed: 1e8 * Math.random(),
       sampler: "klms",
+      n_samples: 4,
       scale: 10.0,
       steps: 60, 
       width: width,
