@@ -88,22 +88,20 @@ function App() {
   }
 
   async function onClickRemix() {
-    // const initimgurl1 = document.querySelector("input[name=initimgurl1]").value;
-    // const initimgurl2 = document.querySelector("input[name=initimgurl2]").value;
+    const initimgurl1 = document.querySelector("input[name=rminitimgurl1]").value;
+    const width = parseInt(document.querySelector("input[name=rmwidth]").value);
+    const height = parseInt(document.querySelector("input[name=rmheight]").value);
 
-    // const width = parseInt(document.querySelector("input[name=rwidth]").value);
-    // const height = parseInt(document.querySelector("input[name=rheight]").value);
-    // const numframes = parseInt(document.querySelector("input[name=rnumframes]").value);
-
-    // if (!checkDimensions(width, height)) {
-    //   return;
-    // }
+    if (!checkDimensions(width, height)) {
+      return;
+    }
 
     console.log("TBD");
 
     let config = {
-      mode: "generate", 
+      mode: "remix", 
       text_input: "remix",
+      init_image_data: initimgurl1,
       seed: 1e8 * Math.random(),
       sampler: "klms",
       scale: 10.0,
