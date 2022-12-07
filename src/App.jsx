@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, {useState, useCallback} from 'react';
 import {Tabs} from 'antd';
 
-const GATEWAY_URL = "https://gateway-test.abraham.ai"; //"https://app.dev.aws.abraham.fun"
+const GATEWAY_URL ="https://app.dev.aws.abraham.fun";// "https://gateway-test.abraham.ai"; //"https://app.dev.aws.abraham.fun"
 const MINIO_URL = "https://minio.aws.abraham.fun";
 const MINIO_BUCKET = "creations-stg";
 
@@ -11,8 +11,8 @@ function App() {
   // const [images, setImages] = useState([]);
 
   async function submitPrediction(config, resultId) {
-    const apiKey = "LYq6brWEOKuhrhY72jPG7n5PR5jze1uQ"; // document.querySelector("input[name=apiKey]").value;
-    const apiSecret = "dntM3aDAAefCCKlXsUMj2lCUG1nD5DOO"; // document.querySelector("input[name=apiSecret]").value;
+    const apiKey = document.querySelector("input[name=apiKey]").value;
+    const apiSecret = document.querySelector("input[name=apiSecret]").value;
 
     if (!apiKey || !apiSecret) {
       alert("Please enter your API key and secret in the first tab");
@@ -245,7 +245,7 @@ function App() {
   return (
     <div className="App">
       <Tabs defaultActiveKey="1">
-        {/* <Tabs.TabPane tab="API Key" key="1">
+        {<Tabs.TabPane tab="API Key" key="1">
           <div>
             <br/>&nbsp;<br/>
             API Key: <input type="text" style={{fontSize: "1.05em", width: "300px"}} name="apiKey" placeholder="API Key" required />
@@ -256,7 +256,7 @@ function App() {
             <br/>&nbsp;<br/>
             <hr/>
           </div>
-        </Tabs.TabPane> */}
+        </Tabs.TabPane>}
         <Tabs.TabPane tab="Generate" key="2">
           <div>
             <br/>&nbsp;<br/>
