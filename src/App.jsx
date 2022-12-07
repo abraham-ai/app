@@ -2,15 +2,24 @@ import axios from 'axios'
 import React, {useState, useCallback} from 'react';
 import {Tabs} from 'antd';
 
-const GATEWAY_URL = "https://gateway-test.abraham.ai"; //"https://app.dev.aws.abraham.fun"
+//const GATEWAY_URL = "https://gateway-test.abraham.ai"; //"https://app.dev.aws.abraham.fun"
+const GATEWAY_URL = "https://app.dev.aws.abraham.fun"
 const MINIO_URL = "https://minio.aws.abraham.fun";
 const MINIO_BUCKET = "creations-stg";
+
+const dreamboothClassPrompts = {
+  'banny': 'character',
+  'anni': 'woman',
+  'mattk': 'man',
+  'vanessa': 'woman'      
+}
 
 
 function App() {
   // const [images, setImages] = useState([]);
+  const [creations, setCreations] = useState([]);
 
-  async function submitPrediction(config, resultId) {
+  async function submitPrediction(config, resultId, dreamboothSubject=null) {
     const apiKey = document.querySelector("input[name=apiKey]").value;
     const apiSecret = document.querySelector("input[name=apiSecret]").value;
 
@@ -26,13 +35,30 @@ function App() {
     console.log(responseS)
     const authToken = responseS.data.authToken;
 
-    const request = {
+    
+    if (dreamboothSubject) {
+      console.log("======111111======")
+      console.log(config.prompt)
+      // trick to format prompt with class prompt
+      const dreamboothClassPrompt = dreamboothClassPrompts[dreamboothSubject];
+      config.prompt = config.prompt.replace(`${dreamboothSubject} ${dreamboothClassPrompt}`, `${dreamboothSubject}`);
+      config.prompt = config.prompt.replace(`${dreamboothSubject}`, `${dreamboothSubject} ${dreamboothClassPrompt}`);
+      console.log(config.prompt)
+      console.log("======111111======")
+    }
+
+    let request = {
       "token": authToken,
       "application": "heartbeat", 
       "generator_name": "stable-diffusion", 
       "config": config,
       "metadata": null
     }
+
+    if (dreamboothSubject) {
+      request.generator_name = `dreambooth-${dreamboothSubject}`;
+    }
+
     console.log(request)
     // start prediction
     console.log(GATEWAY_URL+'/predictions')
@@ -90,7 +116,45 @@ function App() {
   }
   
   async function onClickMyCreations() {
-    console.log("TBD")
+    let userId = document.querySelector("input[name=apiKey]").value;
+    let response = await axios.post(GATEWAY_URL+'/fetch', {
+      "userIds": [userId]
+    });
+    const n = Math.min(100, response.data.length);
+    let urls = [];
+    for (var i=0; i<n; i++) {
+      let outputUrl = `${MINIO_URL}/${MINIO_BUCKET}/${response.data[i].output}`;
+      urls.push(outputUrl);
+    }
+    setCreations(urls);
+  }
+
+  async function onClickDreambooth() {
+    const prompt = document.querySelector("input[name=dbprompt]").value;
+    const subject = document.querySelector("input[name=dbsubject]").value;
+    const width = parseInt(document.querySelector("input[name=dbwidth]").value);
+    const height = parseInt(document.querySelector("input[name=dbheight]").value);
+
+    if (prompt.length === 0) {
+      alert('Prompt required');
+      return;
+    }
+
+    if (!checkDimensions(width, height)) {
+      return;
+    }
+
+    const config = {
+      prompt: prompt,
+      seed: 1e8 * Math.random(),
+      width: width,
+      height: height,
+      num_outputs: 1,
+      num_inference_steps: 60,
+      guidance_scale: 8.0
+    }
+    
+    await submitPrediction(config, "Dreambooth", subject);
   }
 
   async function onClickRemix() {
@@ -101,8 +165,6 @@ function App() {
     if (!checkDimensions(width, height)) {
       return;
     }
-
-    console.log("TBD");
 
     let config = {
       mode: "remix", 
@@ -252,9 +314,23 @@ function App() {
             <br/>&nbsp;<br/>
             API Secret: <input type="text" style={{fontSize: "1.05em", width: "300px"}} name="apiSecret" placeholder="API Secret" required />
             <br/>&nbsp;<br/>
-            <button style={{fontSize: "1.1em", width: "200px"}} onClick={onClickMyCreations}>Get my data</button>
-            <br/>&nbsp;<br/>
             <hr/>
+            <br/>&nbsp;<br/>
+            <button style={{fontSize: "1.1em", width: "200px"}} onClick={onClickMyCreations}>Show my creations</button>
+            <br/>&nbsp;<br/>
+            <div id="myCreations">
+              
+              {/* for all creations, write them in a line */}
+              {creations.map((creation, index) => {
+                return (
+                  <div key={index}>
+                    {creation}
+                  </div>)})};
+
+
+
+
+            </div>
           </div>
         </Tabs.TabPane>}
         <Tabs.TabPane tab="Generate" key="2">
@@ -323,6 +399,22 @@ function App() {
             <br/>&nbsp;<br/>
             {/* <img alt="" id="resultReal2Real" /> */}
             <video id="resultReal2Real" controls autoPlay loop />            
+          </div>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Dreambooth" key="6">
+          <div>
+            <br/>&nbsp;<br/>
+            Prompt: <input type="text" style={{fontSize: "1.2em", width: "1080px"}} name="dbprompt" placeholder="Prompt" required />
+            <br/>&nbsp;<br/>
+            Subject: <input type="text" style={{fontSize: "1.2em", width: "100px"}} name="dbsubject" defaultValue="anni" required />
+            <br/>&nbsp;<br/>
+            &nbsp;Width: <input type="text" style={{fontSize: "1.2em", width: "100px"}} name="dbwidth" defaultValue="512" required />
+            &nbsp;Height: <input type="text" style={{fontSize: "1.2em", width: "100px"}} name="dbheight" defaultValue="512" required />
+            <br/>&nbsp;<br/>
+            <button style={{fontSize: "1.1em", width: "200px"}} onClick={onClickDreambooth}>Generate</button>
+            <div id="progressDreambooth"></div>
+            <br/>&nbsp;<br/>
+            <img alt="" id="resultDreambooth" />          
           </div>
         </Tabs.TabPane>
       </Tabs>
