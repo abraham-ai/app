@@ -406,7 +406,7 @@ function App() {
             <br/>&nbsp;<br/>
             Prompt: <input type="text" style={{fontSize: "1.2em", width: "1080px"}} name="dbprompt" placeholder="Prompt" required />
             <br/>&nbsp;<br/>
-            Subject: <input type="text" style={{fontSize: "1.2em", width: "100px"}} name="dbsubject" defaultValue="anni" required />
+            Subject: <input type="text" style={{fontSize: "1.2em", width: "100px"}} name="dbsubject" defaultValue="Subject" required />
             <br/>&nbsp;<br/>
             &nbsp;Width: <input type="text" style={{fontSize: "1.2em", width: "100px"}} name="dbwidth" defaultValue="512" required />
             &nbsp;Height: <input type="text" style={{fontSize: "1.2em", width: "100px"}} name="dbheight" defaultValue="512" required />
