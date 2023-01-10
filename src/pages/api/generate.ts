@@ -41,7 +41,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     if (error.response.data == "jwt expired") {
       return res.status(401).json({ error: "Authentication expired" });
     }
-    return res.status(500).json({ error: "Error generating image" });
+    return res.status(500).json({ error: error.response.data });
   }
 };
 
