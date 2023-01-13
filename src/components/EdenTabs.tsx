@@ -4,6 +4,7 @@ import GenerateTab from "components/tabs/GenerateTab";
 import InterpolateTab from "components/tabs/InterpolateTab";
 import Real2RealTab from "components/tabs/Real2RealTab";
 import RemixTab from "components/tabs/RemixTab";
+import MyProfileTab from "components/tabs/MyProfileTab";
 import React from "react";
 
 const tabItems = [
@@ -13,23 +14,28 @@ const tabItems = [
     children: <AuthTab />,
   },
   {
-    label: "Generate",
+    label: "My Profile",
     key: "tab2",
+    children: <MyProfileTab />,
+  },
+  {
+    label: "Generate",
+    key: "tab3",
     children: <GenerateTab />,
   },
   {
     label: "Remix",
-    key: "tab3",
+    key: "tab4",
     children: <RemixTab />,
   },
   {
     label: "Interpolate",
-    key: "tab4",
+    key: "tab5",
     children: <InterpolateTab />,
   },
   {
     label: "Real2Real",
-    key: "tab5",
+    key: "tab6",
     children: <Real2RealTab />,
   },
 ];

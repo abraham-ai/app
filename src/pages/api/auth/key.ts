@@ -20,6 +20,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     });
     const { authToken } = gatewayRes.data;
     req.session.apiKeyToken = authToken;
+    req.session.userId = apiKey;
     await req.session.save();
 
     res.send({ message: "Successfully authenticated key pair" });

@@ -9,6 +9,7 @@ declare module "iron-session" {
   interface IronSessionData {
     apiKeyToken?: string;
     ethereumToken?: string;
+    userId?: string;
   }
 }
 

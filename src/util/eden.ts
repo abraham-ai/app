@@ -56,3 +56,14 @@ export const getGatewayResult = async (
   }
   return response;
 };
+
+export const getMyCreationsResult = async (
+  userId: string,
+  timeout: number = 2000
+) => {
+  await new Promise((r) => setTimeout(r, timeout));
+  const response = await axios.post(GATEWAY_URL + "/fetch", {
+    userIds: [userId],
+  });
+  return response;
+};
