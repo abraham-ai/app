@@ -1,6 +1,5 @@
 import { Button, Form, Table, InputNumber, Space } from "antd";
 import axios from "axios";
-// import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
 
 
@@ -15,8 +14,6 @@ const MyProfileTab = () => {
     dateto: "1/12/2023",
   };
 
-  // const { selectedAuthMode } = useContext(AuthContext);
-
   const [form] = Form.useForm();
   const [creations, setCreations] = useState<object[]>([]);
   const [generating, setGenerating] = useState<boolean>(false);
@@ -25,11 +22,8 @@ const MyProfileTab = () => {
   const handleGenerate = async (values: MyCreationsFormInputs) => {
     setGenerating(true);
     try {
-      // console.log(selectedAuthMode);
-
       const response = await axios.post("/api/mycreations", {
         ...values,
-        // authMode: selectedAuthMode,
       });
       const data = response.data.creations &&
         response.data.creations.map((creation: any) => {

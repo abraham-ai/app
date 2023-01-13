@@ -1,6 +1,5 @@
 import { Button } from "antd";
 import axios from "axios";
-// import { AuthContext } from "contexts/AuthContext";
 import React, { useContext, useState } from "react";
 import { SiweMessage } from "siwe";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
@@ -8,9 +7,6 @@ import { useAccount, useNetwork, useSignMessage } from "wagmi";
 const EthereumAuth = () => {
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
-  // const { setSelectedAuthMode, availableAuthModes, setAvailableAuthModes } =
-  //   useContext(AuthContext);
-
   const [ethAuthenticating, setEthAuthenticating] = useState(false);
   const [ethMessage, setEthMessage] = useState<string | null>(null);
 
@@ -23,11 +19,6 @@ const EthereumAuth = () => {
           userAddress: address,
         });
         setEthMessage("Successfully authenticated as " + address);
-        // setAvailableAuthModes({
-        //   ...availableAuthModes,
-        //   ethereum: true,
-        // });
-        // setSelectedAuthMode("ethereum");
       } catch (error: any) {
         setEthMessage("Error authenticating");
       }

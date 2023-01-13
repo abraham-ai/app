@@ -1,6 +1,4 @@
-// import { AuthMode } from "models/types";
 import { NextApiRequest, NextApiResponse } from "next";
-// import { getAuthToken } from "util/auth";
 import { getGatewayResult } from "util/eden";
 import { withSessionRoute } from "util/withSession";
 
@@ -9,12 +7,10 @@ interface ApiRequest extends NextApiRequest {
     initImageUrl: string;
     width: number;
     height: number;
-    // authMode: AuthMode;
   };
 }
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
-  // const { initImageUrl, width, height, authMode } = req.body;
   const { initImageUrl, width, height } = req.body;
 
   const config = {
@@ -30,7 +26,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     height: height,
   };
 
-  const authToken = req.session.token; //getAuthToken(authMode, req.session);
+  const authToken = req.session.token;
 
   if (!authToken) {
     res.status(401).json({ error: "Not authenticated" });
