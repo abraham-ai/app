@@ -62,6 +62,8 @@ export const getMyCreationsResult = async (
   timeout: number = 2000
 ) => {
   await new Promise((r) => setTimeout(r, timeout));
+  console.log("get my creatrios")
+  console.log(userId)
   const response = userId ? await axios.post(GATEWAY_URL + "/fetch", {
     userIds: [userId],
   }) : { data: [] };

@@ -22,7 +22,8 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
       userType: "ethereum",
     });
     const { authToken } = gatewayRes.data;
-    req.session.ethereumToken = authToken;
+    req.session.token = authToken;
+    req.session.userId = userAddress;
     await req.session.save();
 
     res.send({ message: "Successfully authenticated key pair" });

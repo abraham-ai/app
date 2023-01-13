@@ -3,52 +3,50 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import "antd/dist/reset.css";
 import { withSessionSsr } from "util/withSession";
-import { AuthMode } from "models/types";
+// import { AuthMode } from "models/types";
 import { useState } from "react";
-import { AuthContext } from "contexts/AuthContext";
+// import { AuthContext } from "contexts/AuthContext";
 
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps({ req }) {
-    const apiKeyToken = req.session.apiKeyToken ? req.session.apiKeyToken : "";
-    const ethereumToken = req.session.ethereumToken
-      ? req.session.ethereumToken
+    // const apiKeyToken = req.session.token ? req.session.token : "";
+    const token = req.session.token
+      ? req.session.token
       : "";
 
     return {
       props: {
-        apiKeyToken,
-        ethereumToken,
+        token,
       },
     };
   }
 );
 
 interface Props {
-  apiKeyToken?: string;
-  ethereumToken?: string;
+  token?: string;
 }
 
 const Home: NextPage = (props: Props) => {
-  const [selectedAuthMode, setSelectedAuthMode] = useState<
-    AuthMode | undefined
-  >(
-    props.ethereumToken ? "ethereum" : props.apiKeyToken ? "apiKey" : undefined
-  );
-  const [availableAuthModes, setAvailableAuthModes] = useState<
-    Record<AuthMode, boolean>
-  >({
-    ethereum: props.ethereumToken ? true : false,
-    apiKey: props.apiKeyToken ? true : false,
-  });
+  // const [selectedAuthMode, setSelectedAuthMode] = useState<
+  //   AuthMode | undefined
+  // >(
+  //   props.token ? "ethereum" : props.apiKeyToken ? "apiKey" : undefined
+  // );
+  // const [availableAuthModes, setAvailableAuthModes] = useState<
+  //   Record<AuthMode, boolean>
+  // >({
+  //   ethereum: props.ethereumToken ? true : false,
+  //   apiKey: props.apiKeyToken ? true : false,
+  // });
   return (
-    <AuthContext.Provider
-      value={{
-        selectedAuthMode,
-        setSelectedAuthMode,
-        availableAuthModes,
-        setAvailableAuthModes,
-      }}
-    >
+    // <AuthContext.Provider
+    //   value={{
+    //     selectedAuthMode,
+    //     setSelectedAuthMode,
+    //     availableAuthModes,
+    //     setAvailableAuthModes,
+    //   }}
+    // >
       <div>
         <Head>
           <title>Eden Examples</title>
@@ -58,7 +56,7 @@ const Home: NextPage = (props: Props) => {
 
         <MainPageContent />
       </div>
-    </AuthContext.Provider>
+    // </AuthContext.Provider>
   );
 };
 
