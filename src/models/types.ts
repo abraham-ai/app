@@ -1,1 +1,1 @@
-export type AuthMode = "apiKey" | "ethereum";
+// export type AuthMode = "apiKey" | "ethereum";

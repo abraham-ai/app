@@ -1,7 +1,7 @@
 import { Button, Form, Input, InputNumber, Space } from "antd";
 import axios from "axios";
 import VideoResult from "components/VideoResult";
-import { AuthContext } from "contexts/AuthContext";
+// import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
 
 interface InterpolateFormInputs {
@@ -21,7 +21,7 @@ const InterpolateTab = () => {
     numFrames: 30,
   };
 
-  const { selectedAuthMode } = useContext(AuthContext);
+  // const { selectedAuthMode } = useContext(AuthContext);
 
   const [resultUrl, setResultUrl] = useState<string>("");
   const [generating, setGenerating] = useState<boolean>(false);
@@ -32,7 +32,7 @@ const InterpolateTab = () => {
     try {
       const response = await axios.post("/api/interpolate", {
         ...values,
-        authMode: selectedAuthMode,
+        // authMode: selectedAuthMode,
       });
       setResultUrl(response.data.outputUrl);
     } catch (error: any) {

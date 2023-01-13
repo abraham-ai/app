@@ -1,7 +1,7 @@
 import { Button, Form, Input, InputNumber, Space } from "antd";
 import axios from "axios";
 import ImageResult from "components/ImageResult";
-import { AuthContext } from "contexts/AuthContext";
+// import { AuthContext } from "contexts/AuthContext";
 import { useContext, useState } from "react";
 
 interface RemixFormInputs {
@@ -17,7 +17,7 @@ const RemixTab = () => {
     height: 512,
   };
 
-  const { selectedAuthMode } = useContext(AuthContext);
+  // const { selectedAuthMode } = useContext(AuthContext);
 
   const [form] = Form.useForm();
   const width = Form.useWatch("width", form);
@@ -31,7 +31,7 @@ const RemixTab = () => {
     try {
       const response = await axios.post("/api/remix", {
         ...values,
-        authMode: selectedAuthMode,
+        // authMode: selectedAuthMode,
       });
       setResultUrl(response.data.outputUrl);
     } catch (error: any) {

@@ -5,7 +5,6 @@ import InterpolateTab from "components/tabs/InterpolateTab";
 import Real2RealTab from "components/tabs/Real2RealTab";
 import RemixTab from "components/tabs/RemixTab";
 import MyProfileTab from "components/tabs/MyProfileTab";
-import React from "react";
 
 const tabItems = [
   {
