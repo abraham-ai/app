@@ -18,7 +18,7 @@ const MyProfileTab = () => {
   const { selectedAuthMode } = useContext(AuthContext);
 
   const [form] = Form.useForm();
-  const [creations, setCreations] = useState<string[]>([]);
+  const [creations, setCreations] = useState<object[]>([]);
   const [generating, setGenerating] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
 

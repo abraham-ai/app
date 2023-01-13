@@ -58,12 +58,12 @@ export const getGatewayResult = async (
 };
 
 export const getMyCreationsResult = async (
-  userId: string,
+  userId: string | undefined,
   timeout: number = 2000
 ) => {
   await new Promise((r) => setTimeout(r, timeout));
-  const response = await axios.post(GATEWAY_URL + "/fetch", {
+  const response = userId ? await axios.post(GATEWAY_URL + "/fetch", {
     userIds: [userId],
-  });
+  }) : { data: [] };
   return response;
 };
