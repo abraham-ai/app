@@ -1,7 +1,7 @@
-import { Button, Form, Table, InputNumber, Space } from "antd";
+import { Button, Form, Table, InputNumber, DatePicker, Space } from "antd";
 import axios from "axios";
 import { useContext, useState } from "react";
-
+import type { DatePickerProps } from 'antd';
 
 interface MyCreationsFormInputs {
   datefrom: number;
@@ -11,7 +11,7 @@ interface MyCreationsFormInputs {
 const MyProfileTab = () => {
   const initialValues = {
     datefrom: "1/1/2023",
-    dateto: "1/12/2023",
+    dateto: new Date().toLocaleDateString(),
   };
 
   const [form] = Form.useForm();
@@ -68,20 +68,25 @@ const MyProfileTab = () => {
     },
   ];
   
+  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+    console.log(date, dateString);
+  };
+
+  
   return (
     <>
       <Form
         form={form}
         name="generate"
-        initialValues={initialValues}
+        // initialValues={initialValues}
         onFinish={handleGenerate}
       >
         <Space>
           <Form.Item label="From" name="datefrom">
-            <InputNumber placeholder="Date from" />
+            <DatePicker onChange={onChange} />
           </Form.Item>
           <Form.Item label="To" name="dateto">
-            <InputNumber placeholder="Date to" />
+            <DatePicker onChange={onChange} />
           </Form.Item>
         </Space>
         <Form.Item>
