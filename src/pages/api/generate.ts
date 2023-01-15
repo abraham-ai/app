@@ -12,7 +12,11 @@ interface ApiRequest extends NextApiRequest {
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const { prompt, width, height } = req.body;
+  console.log("go!")
+  console.log(prompt, width, height);
 
+  return res.status(403).json({ error: "Ooops" });
+  
   const config = {
     mode: "generate",
     text_input: prompt,

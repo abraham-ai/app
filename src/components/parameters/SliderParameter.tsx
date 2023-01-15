@@ -1,50 +1,49 @@
-import { 
-  Form, 
-  InputNumber, 
-  Col, 
-  Row, 
-  Slider
-} from "antd";
+import { Form, Col, Row, Slider, InputNumber } from "antd";
 import { useState } from "react";
 
 
-const SliderParameter = (props: {parameter: any}) => {
-  const [inputValue, setInputValue] = useState(props.parameter.default);
+const SliderParameter = (props: {form: any, parameter: any}) => {
+  const [value, setValue] = useState(props.parameter.default);
 
   const onChange = (newValue: number) => {
-    setInputValue(newValue);
+    setValue(newValue);
+    props.form.setFieldsValue({[props.parameter.name]: newValue});
   };
 
   return (
-    <Form.Item label={props.parameter.label} name={props.parameter.name}>
+    <div style={{padding: 10, marginBottom: 10}}>
       <Row>
-        <Col span={12}>
-          <Slider
-            min={props.parameter.min}
-            max={props.parameter.max}
+        <Col span={8}>
+          <Form.Item 
+            style={{ marginBottom: 5 }} 
+            label={props.parameter.label} 
+            name={props.parameter.name}
+            initialValue={props.parameter.default} 
+          >
+            <Slider 
+              value={value}
+              min={props.parameter.min} 
+              max={props.parameter.max} 
+              onChange={(newValue: number) => setValue(newValue)}
+            />
+          </Form.Item>
+        </Col>
+        <Col>
+          <InputNumber 
+            value={value}
+            min={props.parameter.min} 
+            max={props.parameter.max} 
             onChange={onChange}
-            // tooltip={{ open: true }} 
-            value={typeof inputValue === 'number' ? inputValue : 0}
           />
         </Col>
-        {/* <Col span={4}>
-          <InputNumber
-            min={props.parameter.min}
-            max={props.parameter.max}
-            style={{ margin: '0 16px' }}
-            value={inputValue}
-            onChange={onChange}
-          />
-        </Col> */}
       </Row>
-      {/* <Row>
-        <Col span={12}>
-          <p style={{color: "gray"}}>{props.parameter.description}</p>
+      <Row>
+        <Col>
+          <span style={{color: "gray" }}>{props.parameter.description}</span>
         </Col>
-      </Row> */}
-    </Form.Item>
+      </Row>
+    </div>
   );
 };
-
 
 export default SliderParameter;

@@ -1,13 +1,11 @@
-import { Button, Form } from "antd";
+import { Button, Form, Input, Select, InputNumber, Space, Row, Col, Slider } from "antd";
 import axios from "axios";
 import ImageResult from "components/ImageResult";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
-import SliderParameter from "components/parameters/SliderParameter";
 import StringParameter from "components/parameters/StringParameter";
 import OptionParameter from "components/parameters/OptionParameter";
-
-import MyForm from "components/tabs/DynamicForm";
+import SliderParameter from "components/parameters/SliderParameter";
 
 interface GenerateFormInputs {
   prompt: string;
@@ -26,22 +24,39 @@ const parameters = {
 };
 
 
-const GenerateTab = () => {  
-  const [form] = Form.useForm();
-  const width = Form.useWatch("width", form);
-  const height = Form.useWatch("height", form);
+
+
+const MyForm = () => {
   
+  // const initialValues = {
+  //   width: 512,
+  //   height: 512,
+  // };
+
+  const [form] = Form.useForm();
+  
+  // const [width, setWidth] = useState(initialValues.width);
+  // const [height, setHeight] = useState(initialValues.height);
+
   const [resultUrl, setResultUrl] = useState<string>("");
   const [generating, setGenerating] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
 
+  // useEffect(() => {
+  //   form.setFieldsValue({ width, height });
+  // }, [width, height, form]);
+
+
   const handleGenerate = async (values: GenerateFormInputs) => {
     setGenerating(true);
     try {
-      const response = await axios.post("/api/generate", {
-        ...values,
-      });
-      setResultUrl(response.data.outputUrl);
+      console.log(values);
+      console.log({...values});
+      console.log("gheys")
+      // const response = await axios.post("/api/generate", {
+      //   ...values,
+      // });
+      // setResultUrl(response.data.outputUrl);
     } catch (error: any) {
       setMessage(`Error: ${error.response.data.error}`);
     }
@@ -50,20 +65,21 @@ const GenerateTab = () => {
 
   return (
     <>
-      {/* <Form
+      <Form
         form={form}
         name="generate"
         onFinish={handleGenerate}
-      > */}
-        {/* {Object.keys(parameters).map((key) => {
+      >
+        {Object.keys(parameters).map((key) => {
           if (parameters[key].type === Number) {
-            return <SliderParameter key={key} parameter={parameters[key]} />
+            return <SliderParameter form={form} key={key} parameter={parameters[key]} />
           } else if (parameters[key].type === String && parameters[key].options) {
-            return <OptionParameter key={key}  parameter={parameters[key]} />            
+            return <OptionParameter form={form} key={key}  parameter={parameters[key]} />            
           } else if (parameters[key].type === String) {
-            return <StringParameter key={key} parameter={parameters[key]} />
+            return <StringParameter form={form} key={key} parameter={parameters[key]} />
           }
         })}
+
         <Form.Item>
           <Button
             type="primary"
@@ -75,11 +91,9 @@ const GenerateTab = () => {
           </Button>
         </Form.Item>
       </Form>
-      {message && <p>{message}</p>}
-      <ImageResult width={width} height={height} imageUrl={resultUrl} /> */}
-      <MyForm />
     </>
   );
 };
 
-export default GenerateTab;
+
+export default MyForm;
