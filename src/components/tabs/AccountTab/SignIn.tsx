@@ -13,7 +13,7 @@ const SignIn = () => {
   const { signMessage } = useSignMessage({
     onSuccess: async (data, variables) => {
       try {
-        await axios.post("/api/auth/wallet", {
+        await axios.post("/api/login", {
           message: variables.message,
           signature: data,
           userAddress: address,

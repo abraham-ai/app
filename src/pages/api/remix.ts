@@ -13,25 +13,21 @@ interface ApiRequest extends NextApiRequest {
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const { initImageUrl, width, height } = req.body;
 
-  const config = {
-    mode: "remix",
-    text_input: "remix",
-    init_image_data: initImageUrl,
-    seed: 1e8 * Math.random(),
-    sampler: "klms",
-    n_samples: 4,
-    scale: 10.0,
-    steps: 60,
-    width: width,
-    height: height,
-  };
-
   const authToken = req.session.token;
 
   if (!authToken) {
     res.status(401).json({ error: "Not authenticated" });
     return;
   }
+
+  const config = {
+    generatorName: "remix",
+    requestConfig: {
+      init_image_data: initImageUrl,
+      width,
+      height,
+    },
+  };
 
   try {
     const result = await getGatewayResult(config, authToken);

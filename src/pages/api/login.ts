@@ -15,14 +15,13 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const GATEWAY_URL = process.env.GATEWAY_URL as string;
 
   try {
-    const gatewayRes = await axios.post(`${GATEWAY_URL}/sign_in`, {
+    const gatewayRes = await axios.post(`${GATEWAY_URL}/auth/login`, {
       message,
       signature,
-      userId: userAddress,
-      userType: "ethereum",
+      address: userAddress,
     });
-    const { authToken } = gatewayRes.data;
-    req.session.token = authToken;
+    const { token } = gatewayRes.data;
+    req.session.token = token;
     req.session.userId = userAddress;
     await req.session.save();
 
