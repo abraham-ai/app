@@ -18,25 +18,14 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const interpolation_init_images = [initImageUrl1, initImageUrl2];
 
   const config = {
-    mode: "interpolate",
-    stream: true, // this doesn't do anything yet
-    stream_every: 1, // this doesn't do anything yet
-    text_input: "real2real",
-    seed: 1e8 * Math.random(),
-    sampler: "euler",
-    scale: 10.0,
-    steps: 25,
-    width: width,
-    height: height,
-    n_frames: numFrames,
-    loop: true,
-    smooth: true,
-    n_film: 1,
-    scale_modulation: 0.2,
-    fps: 12,
-    interpolation_init_images_use_img2txt: true,
-    interpolation_init_images: interpolation_init_images,
-    interpolation_seeds: [1e8 * Math.random(), 1e8 * Math.random()],
+    generatorName: "real2real",
+    requestConfig: {
+      interpolation_init_images: interpolation_init_images,
+      interpolation_seeds: [1e8 * Math.random(), 1e8 * Math.random()],
+      width,
+      height,
+      n_frames: numFrames,
+    },
   };
 
   const authToken = req.session.token;
@@ -57,6 +46,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     if (error.response.data == "jwt expired") {
       return res.status(401).json({ error: "Authentication expired" });
     }
+    console.error(error);
     return res.status(500).json({ error: error.response.data });
   }
 };
