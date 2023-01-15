@@ -22,7 +22,6 @@ export const submitPrediction = async (config: any, authToken: string) => {
     },
   });
   const prediction_id = responseR.data.taskId;
-  console.log("PREDICTION ID: " + prediction_id);
   return prediction_id;
 };
 
@@ -36,13 +35,10 @@ export const pollResult = async (
       Authorization: `Bearer ${authToken}`,
     },
   });
-  console.log(response.data);
   let { status, output } = response.data.tasks[0];
-  console.log(output);
   if (status == "completed") {
     const finalOutput = output.slice(-1);
     const outputUrl = `${MINIO_URL}/${MINIO_BUCKET}/${finalOutput}`;
-    console.log(outputUrl);
     return { status, outputUrl, error: null };
   } else if (status == "failed") {
     return { status, outputUrl: null, error: "Prediction failed" };
@@ -57,7 +53,6 @@ export const getGatewayResult = async (
 ) => {
   let prediction_id = await submitPrediction(config, authToken);
   let response = await pollResult(prediction_id, authToken);
-  console.log(response);
   while (
     response.status == "pending" ||
     response.status == "starting" ||
@@ -74,8 +69,6 @@ export const getMyCreationsResult = async (
   timeout: number = 2000
 ) => {
   await new Promise((r) => setTimeout(r, timeout));
-  console.log("get my creatrios");
-  console.log(userId);
   const response = userId
     ? await axios.post(GATEWAY_URL + "/fetch", {
         userIds: [userId],

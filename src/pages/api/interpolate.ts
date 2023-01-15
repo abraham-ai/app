@@ -38,7 +38,6 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
 
   try {
     const result = await getGatewayResult(config, authToken);
-    console.log("resss", result);
     if (result.error) {
       console.error(result.error);
       return res.status(500).json({ error: result.error });
