@@ -19,27 +19,17 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const interpolation_texts = [prompt1, prompt2];
 
   const config = {
-    mode: "interpolate",
-    stream: true, // this doesn't do anything yet
-    stream_every: 1, // this doesn't do anything yet
-    text_input: `${prompt1}_to_${prompt2}`,
-    seed: 1e8 * Math.random(),
-    sampler: "euler",
-    scale: 10.0,
-    steps: 25,
-    width: width,
-    height: height,
-    n_frames: numFrames,
-    loop: true,
-    smooth: true,
-    n_film: 1,
-    scale_modulation: 0.2,
-    fps: 12,
-    interpolation_texts: interpolation_texts,
-    interpolation_seeds: [1e8 * Math.random(), 1e8 * Math.random()],
+    generatorName: "interpolate",
+    requestConfig: {
+      interpolation_texts,
+      interpolation_seeds: [1e8 * Math.random(), 1e8 * Math.random()],
+      width,
+      height,
+      n_frames: numFrames,
+    },
   };
 
-  const authToken = req.session.token; 
+  const authToken = req.session.token;
 
   if (!authToken) {
     res.status(401).json({ error: "Not authenticated" });

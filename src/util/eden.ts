@@ -11,27 +11,34 @@ interface PollResponse {
 }
 
 export const submitPrediction = async (config: any, authToken: string) => {
+  const { generatorName, requestConfig } = config;
   let request = {
-    token: authToken,
-    application: "heartbeat",
-    generator_name: "stable-diffusion",
-    config: config,
-    metadata: { "user-agent": "examples.eden.art" },
+    generatorName,
+    config: requestConfig,
   };
-  let responseR = await axios.post(GATEWAY_URL + "/request", request);
-  let prediction_id = responseR.data;
+  let responseR = await axios.post(GATEWAY_URL + "/tasks/create", request, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+  const prediction_id = responseR.data.taskId;
   return prediction_id;
 };
 
 export const pollResult = async (
-  prediction_id: string
+  prediction_id: string,
+  authToken: string
 ): Promise<PollResponse> => {
-  const response = await axios.post(GATEWAY_URL + "/fetch", {
-    taskIds: [prediction_id],
+  const data = { taskIds: [prediction_id] };
+  const response = await axios.post(GATEWAY_URL + "/tasks/fetch", data, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
   });
-  let { status, output } = response.data[0];
-  if (status == "complete") {
-    let outputUrl = `${MINIO_URL}/${MINIO_BUCKET}/${output}`;
+  let { status, output } = response.data.tasks[0];
+  if (status == "completed") {
+    const finalOutput = output.slice(-1);
+    const outputUrl = `${MINIO_URL}/${MINIO_BUCKET}/${finalOutput}`;
     return { status, outputUrl, error: null };
   } else if (status == "failed") {
     return { status, outputUrl: null, error: "Prediction failed" };
@@ -45,14 +52,14 @@ export const getGatewayResult = async (
   timeout: number = 2000
 ) => {
   let prediction_id = await submitPrediction(config, authToken);
-  let response = await pollResult(prediction_id);
+  let response = await pollResult(prediction_id, authToken);
   while (
     response.status == "pending" ||
     response.status == "starting" ||
     response.status == "running"
   ) {
     await new Promise((r) => setTimeout(r, timeout));
-    response = await pollResult(prediction_id);
+    response = await pollResult(prediction_id, authToken);
   }
   return response;
 };
@@ -62,10 +69,10 @@ export const getMyCreationsResult = async (
   timeout: number = 2000
 ) => {
   await new Promise((r) => setTimeout(r, timeout));
-  console.log("get my creatrios")
-  console.log(userId)
-  const response = userId ? await axios.post(GATEWAY_URL + "/fetch", {
-    userIds: [userId],
-  }) : { data: [] };
+  const response = userId
+    ? await axios.post(GATEWAY_URL + "/fetch", {
+        userIds: [userId],
+      })
+    : { data: [] };
   return response;
 };
