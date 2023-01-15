@@ -23,7 +23,7 @@ const InterpolateTab = () => {
 
   // const { selectedAuthMode } = useContext(AuthContext);
 
-  const [resultUrl, setResultUrl] = useState<string>();
+  const [resultUrl, setResultUrl] = useState<string>("");
   const [generating, setGenerating] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
 
