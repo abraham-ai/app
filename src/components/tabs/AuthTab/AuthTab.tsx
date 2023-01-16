@@ -1,8 +1,12 @@
+import CreditBalance from "components/CreditBalance";
 import EthereumAuth from "components/tabs/AuthTab/EthereumAuth";
 
 const AuthTab = () => {
   return (
-    <EthereumAuth />
+    <>
+      <EthereumAuth />
+      <CreditBalance />
+    </>
   );
 };
 
