@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Table, Divider } from "antd";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { SiweMessage } from "siwe";
