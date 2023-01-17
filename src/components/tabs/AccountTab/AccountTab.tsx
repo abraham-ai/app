@@ -1,14 +1,14 @@
 import { Divider } from "antd";
 import React from "react";
 
-import SignIn from "components/tabs/AccountTab/SignIn";
+import EthereumAuth from "components/tabs/AccountTab/EthereumAuth";
 import CreditBalance from "components/tabs/AccountTab/CreditBalance";
 import ApiKeys from "components/tabs/AccountTab/ApiKeys";
 
 const AccountTab = () => {
   return (
     <>
-      <SignIn />
+      <EthereumAuth />
       <Divider />
       <CreditBalance />
       <Divider />

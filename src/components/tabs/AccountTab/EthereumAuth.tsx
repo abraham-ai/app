@@ -4,7 +4,7 @@ import React, { useContext, useState } from "react";
 import { SiweMessage } from "siwe";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 
-const SignIn = () => {
+const EthereumAuth = () => {
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
   const [ethAuthenticating, setEthAuthenticating] = useState(false);
@@ -65,4 +65,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default EthereumAuth;
