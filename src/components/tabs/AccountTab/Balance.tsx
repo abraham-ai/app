@@ -1,10 +1,10 @@
-import { Button } from "antd";
+import { Button, Table, Divider } from "antd";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { SiweMessage } from "siwe";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 
-const EthereumAuth = () => {
+const Balance = () => {
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
   const [ethAuthenticating, setEthAuthenticating] = useState(false);
@@ -13,7 +13,7 @@ const EthereumAuth = () => {
   const { signMessage } = useSignMessage({
     onSuccess: async (data, variables) => {
       try {
-        await axios.post("/api/login", {
+        await axios.post("/api/auth/wallet", {
           message: variables.message,
           signature: data,
           userAddress: address,
@@ -65,4 +65,4 @@ const EthereumAuth = () => {
   );
 };
 
-export default EthereumAuth;
+export default Balance;
