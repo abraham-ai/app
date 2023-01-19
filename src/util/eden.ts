@@ -10,6 +10,36 @@ interface PollResponse {
   error: string | null;
 }
 
+export const getGenerator = async (generatorName: string) => {
+  const response = await axios.get(GATEWAY_URL + "/generators");
+  console.log(response.data.generators);
+  const generator = response.data.generators.filter(
+    (obj: { generatorName: string; }) => {
+    return obj.generatorName === generatorName
+  });
+  console.log("get gen")
+  console.log(generator)
+  const latestGeneratorVersion = generator[0].versions[0];
+  return latestGeneratorVersion;
+};
+
+export const uploadMedia = async (authToken: string) => {
+  console.log("hey now");
+  const request = {
+
+  };
+  let response = await axios.post(GATEWAY_URL + "/media", request, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+  //return response.message;
+  return "the message";
+};
+
+
+
+
 export const submitPrediction = async (config: any, authToken: string) => {
   const { generatorName, requestConfig } = config;
   let request = {

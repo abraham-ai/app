@@ -12,6 +12,8 @@ import Real2RealTab from "components/tabs/Real2RealTab";
 import RemixTab from "components/tabs/RemixTab";
 import MyProfileTab from "components/tabs/MyProfileTab";
 
+import TestPage from "components/TestPage";
+
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -63,7 +65,7 @@ const EdenTabs: React.FC = () => {
         <Header style={{ padding: 16, background: colorBgContainer, marginLeft: "auto", marginRight: 20 }}>
           <ConnectButton />
         </Header>
-        <Content style={{ margin: '0 16px', padding: "16px", background: colorBgContainer }}>          
+        {/* <Content style={{ margin: '0 16px', padding: "16px", background: colorBgContainer }}>          
           {activeItem === '1' && <AccountTab />}
           {activeItem === '2' && <MyProfileTab />}
           {activeItem === '3' && <MyProfileTab />}
@@ -71,7 +73,15 @@ const EdenTabs: React.FC = () => {
           {activeItem === '6' && <InterpolateTab />}
           {activeItem === '7' && <Real2RealTab />}
           {activeItem === '8' && <RemixTab />}
-        </Content>
+        </Content> */}
+        { <Content>
+          
+
+          <TestPage />
+
+
+
+        </Content> }
         <Footer style={{ textAlign: 'center' }}></Footer>
       </Layout>
     </Layout>
