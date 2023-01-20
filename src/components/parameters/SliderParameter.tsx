@@ -3,7 +3,7 @@ import { useState } from "react";
 
 
 const SliderParameter = (props: {form: any, parameter: any}) => {
-  const [value, setValue] = useState(props.parameter.default);
+  const [value, setValue] = useState(props.parameter.defaultValue);
 
   const onChange = (newValue: number) => {
     setValue(newValue);
@@ -11,28 +11,28 @@ const SliderParameter = (props: {form: any, parameter: any}) => {
   };
 
   return (
-    <div style={{padding: 10, marginBottom: 10}}>
+    <>
       <Row>
         <Col span={8}>
           <Form.Item 
             style={{ marginBottom: 5 }} 
             label={props.parameter.label} 
             name={props.parameter.name}
-            initialValue={props.parameter.default} 
+            initialValue={props.parameter.defaultValue} 
           >
             <Slider 
               value={value}
-              min={props.parameter.min} 
-              max={props.parameter.max} 
+              min={props.parameter.minimum} 
+              max={props.parameter.maximum} 
               onChange={(newValue: number) => setValue(newValue)}
             />
           </Form.Item>
         </Col>
-        <Col>
+        <Col style={{marginLeft: 10}}>
           <InputNumber 
             value={value}
-            min={props.parameter.min} 
-            max={props.parameter.max} 
+            min={props.parameter.minimum} 
+            max={props.parameter.maximum} 
             onChange={onChange}
           />
         </Col>
@@ -42,7 +42,7 @@ const SliderParameter = (props: {form: any, parameter: any}) => {
           <span style={{color: "gray" }}>{props.parameter.description}</span>
         </Col>
       </Row>
-    </div>
+    </>
   );
 };
 

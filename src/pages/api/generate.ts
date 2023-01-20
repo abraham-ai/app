@@ -4,23 +4,17 @@ import { withSessionRoute } from "util/withSession";
 
 interface ApiRequest extends NextApiRequest {
   body: {
-    prompt: string;
-    width: number;
-    height: number;
+    reqConfig: any;
   };
 }
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
-  const { prompt, width, height } = req.body;
+  const { reqConfig } = req.body;
   const authToken = req.session.token;
 
   const config = {
     generatorName: "create",
-    requestConfig: {
-      text_input: prompt,
-      width,
-      height,
-    },
+    requestConfig: reqConfig,
   };
 
   if (!authToken) {
@@ -29,7 +23,6 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
 
   try {
     const result = await getGatewayResult(config, authToken);
-
     return res.status(200).json({ outputUrl: result.outputUrl });
   } catch (error: any) {
     console.error(error);
