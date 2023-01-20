@@ -26,6 +26,10 @@ const OptionParameter = (props: {form: any, parameter: any}) => {
             label={props.parameter.label} 
             name={props.parameter.name}
             initialValue={props.parameter.defaultValue}
+            rules={[{ 
+              required: props.parameter.isRequired, 
+              message: `${props.parameter.label} required`
+            }]}
           >      
             {typeof props.parameter.defaultValue === "boolean" ? (
               <Switch

@@ -7,9 +7,29 @@ export const useGeneratorInfo = (generatorName: any) => {
     fetcher,
   );
 
+  if (isLoading) {
+    return {
+      versionId: 'loading',
+      requiredParameters: [],
+      optionalParameters: [],
+      isLoading,
+      error,
+      mutate,
+    };
+  }
+
+  const requiredParameters = data?.generatorVersion.defaultParameters.filter(
+    (parameter: { optional: boolean; }) => !parameter.optional
+  );
+
+  const optionalParameters = data?.generatorVersion.defaultParameters.filter(
+    (parameter: { optional: boolean; }) => parameter.optional
+  );
+
   return {
-    versionId: isLoading ? 'loading' : data?.generatorVersion.versionId,
-    defaultParameters: isLoading ? [] : data?.generatorVersion.defaultParameters,
+    versionId: data?.generatorVersion.versionId,
+    requiredParameters: requiredParameters,
+    optionalParameters: optionalParameters,
     isLoading,
     error,
     mutate,

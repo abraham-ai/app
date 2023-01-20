@@ -4,16 +4,17 @@ import { withSessionRoute } from "util/withSession";
 
 interface ApiRequest extends NextApiRequest {
   body: {
+    generatorName: string;
     reqConfig: any;
   };
 }
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
-  const { reqConfig } = req.body;
+  const { reqConfig, generatorName } = req.body;
   const authToken = req.session.token;
 
   const config = {
-    generatorName: "create",
+    generatorName: generatorName,
     requestConfig: reqConfig,
   };
 

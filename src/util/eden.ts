@@ -20,7 +20,7 @@ export const createNewApiKey = async (authToken: string) => {
   return newApiKey;
 }
 
-export const getGenerator = async (generatorName: string) => {
+export const getGenerator = async (generatorName: string | string[]) => {
   const response = await axios.get(GATEWAY_URL + "/generators");
   console.log(response.data.generators);
   const generator = response.data.generators.filter(
