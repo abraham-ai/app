@@ -1,7 +1,6 @@
-import axios, { formToJSON } from "axios";
+import axios from "axios";
 import fs from 'fs/promises'
-const FormData = require('form-data');
-
+import FormData from 'form-data';
 
 const GATEWAY_URL = process.env.GATEWAY_URL;
 const MINIO_URL = process.env.MINIO_URL;
@@ -21,11 +20,10 @@ export const createNewApiKey = async (authToken: string) => {
   });
   const newApiKey = response.data;
   return newApiKey;
-}
+};
 
 export const getGenerator = async (generatorName: string | string[]) => {
   const response = await axios.get(GATEWAY_URL + "/generators");
-  console.log(response.data.generators);
   const generator = response.data.generators.filter(
     (obj: { generatorName: string; }) => {
       return obj.generatorName === generatorName
@@ -34,23 +32,16 @@ export const getGenerator = async (generatorName: string | string[]) => {
   return latestGeneratorVersion;
 };
 
-export const uploadMedia = async (authToken: string, filePath: string, fileName: string | null) => {
-
-  // Read image from disk as a Buffer
-  const media = await fs.readFile(filePath)
-
-  // Create a form and append image
-  
+export const uploadMedia = async (authToken: string, filePath: string) => {
+  const media = await fs.readFile(filePath);
   const form = new FormData();
-  form.append('media', media, { filename : fileName ? fileName : ''});
-  
+  form.append('media', media);
   let response = await axios.post(GATEWAY_URL + "/media", form, {
     headers: {
       ...form.getHeaders(),
       Authorization: `Bearer ${authToken}`,
     }
   });
-
   return response.data;
 };
 

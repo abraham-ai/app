@@ -12,8 +12,6 @@ import Real2RealTab from "components/tabs/Real2RealTab";
 import RemixTab from "components/tabs/RemixTab";
 import MyProfileTab from "components/tabs/MyProfileTab";
 
-import TestPage from "components/TestPage";
-
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -74,14 +72,6 @@ const EdenTabs: React.FC = () => {
           {activeItem === '7' && <Real2RealTab />}
           {activeItem === '8' && <RemixTab />}
         </Content>
-        {/* { <Content>
-          
-
-          <TestPage />
-
-
-
-        </Content> } */}
         <Footer style={{ textAlign: 'center' }}></Footer>
       </Layout>
     </Layout>

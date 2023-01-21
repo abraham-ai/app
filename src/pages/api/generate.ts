@@ -23,9 +23,17 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   }
 
   try {
+    console.log("aa1")
     const result = await getGatewayResult(config, authToken);
-    return res.status(200).json({ outputUrl: result.outputUrl });
+    console.log("aa2")
+    console.log(result);
+    if (result.error) {
+      return res.status(500).json({ error: result.error });
+    } else {
+      return res.status(200).json({ outputUrl: result.outputUrl });
+    }
   } catch (error: any) {
+    console.log("Error")
     console.error(error);
     return res.status(500).json({ error: error.response.data });
   }

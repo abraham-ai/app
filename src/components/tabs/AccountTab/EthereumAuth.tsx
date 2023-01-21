@@ -1,6 +1,6 @@
-import { Button, Table, Divider } from "antd";
+import { Button } from "antd";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { SiweMessage } from "siwe";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 

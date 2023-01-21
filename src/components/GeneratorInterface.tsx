@@ -7,6 +7,7 @@ import { useGeneratorInfo } from "hooks/useGeneratorInfo";
 
 import ImageResult from "components/ImageResult";
 import VideoResult from "components/VideoResult";
+import UploadParameter from "components/parameters/UploadParameter";
 import StringParameter from "components/parameters/StringParameter";
 import OptionParameter from "components/parameters/OptionParameter";
 import SliderParameter from "components/parameters/SliderParameter";
@@ -50,23 +51,29 @@ const GeneratorInterface = ({ generatorName, isVideo }: { generatorName: string,
       });  
       setResultUrl(response.data.outputUrl);      
     } catch (error: any) {
-      setMessage(`Error: ${error.response.data.error.message}`);
+      setMessage(`Error: ${error.response.data.error}`);
     }
     setGenerating(false);
   };
-
+  
   const renderFormFields = (parameters: any) => {
     return Object.keys(parameters).map((key) => {
       return (
         <div key={key} style={{paddingBottom: 5, marginBottom: 10, borderBottom: "1px solid #ccc"}}>
           {parameters[key].allowedValues.length > 0 ? (
-            <OptionParameter form={form} key={key} parameter={parameters[key]} />
+            <OptionParameter key={key} form={form} parameter={parameters[key]} />
           ) : (
             <>
               {typeof parameters[key].defaultValue === "number" ? (
-                <SliderParameter form={form} key={key} parameter={parameters[key]} />
+                <SliderParameter key={key} form={form} parameter={parameters[key]} />
               ) : (
-                <StringParameter form={form} key={key} parameter={parameters[key]} />
+                <>
+                  {parameters[key].mediaUpload ? (
+                    <UploadParameter key={key} form={form} parameter={parameters[key]} />
+                  ) : (
+                    <StringParameter key={key} form={form} parameter={parameters[key]} />
+                  )}
+                </>
               )}                  
             </>
           )}
