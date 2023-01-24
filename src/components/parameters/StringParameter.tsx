@@ -92,7 +92,7 @@ const StringParameter = (props: {form: any, parameter: any}) => {
               >
                 <Input 
                   value={value} 
-                  onChange={onChange}
+                  onChange={event => {setValue(event.target.value)}}
                 />
               </Form.Item>
             </Col>

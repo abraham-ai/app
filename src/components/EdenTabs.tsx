@@ -6,12 +6,14 @@ import { Layout, Menu, theme } from 'antd';
 import type { MenuProps } from 'antd';
 
 import AccountTab from "components/tabs/AccountTab";
-import CreateTab from "components/tabs/CreateTab";
-import InterpolateTab from "components/tabs/InterpolateTab";
-import Real2RealTab from "components/tabs/Real2RealTab";
-import RemixTab from "components/tabs/RemixTab";
-import TtsTab from "components/tabs/TtsTab";
+// import CreateTab from "components/tabs/CreateTab";
+// import InterpolateTab from "components/tabs/InterpolateTab";
+// import Real2RealTab from "components/tabs/Real2RealTab";
+// import RemixTab from "components/tabs/RemixTab";
+// import TtsTab from "components/tabs/TtsTab";
 import MyProfileTab from "components/tabs/MyProfileTab";
+
+import GeneratorInterface from "components/GeneratorInterface"
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -69,11 +71,13 @@ const EdenTabs: React.FC = () => {
           {activeItem === '1' && <AccountTab />}
           {activeItem === '2' && <MyProfileTab />}
           {activeItem === '3' && <MyProfileTab />}
-          {activeItem === '5' && <CreateTab />}
-          {activeItem === '6' && <InterpolateTab />}
-          {activeItem === '7' && <Real2RealTab />}
-          {activeItem === '8' && <RemixTab />}
-          {activeItem === '9' && <TtsTab />}
+
+          {activeItem === '5' && <GeneratorInterface mediaType="image" generatorName="create" />}
+          {activeItem === '6' && <GeneratorInterface mediaType="video" generatorName="interpolate" />}
+          {activeItem === '7' && <GeneratorInterface mediaType="video" generatorName="real2real" />}
+          {activeItem === '8' && <GeneratorInterface mediaType="image" generatorName="remix" />}
+          {activeItem === '9' && <GeneratorInterface mediaType="audio" generatorName="tts" />}
+
         </Content>
         <Footer style={{ textAlign: 'center' }}></Footer>
       </Layout>

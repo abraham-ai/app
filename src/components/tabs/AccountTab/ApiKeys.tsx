@@ -43,12 +43,16 @@ const ApiKeys = () => {
     },
   ];
 
+  const data = apiKeys?.map(
+    (apiKey: any, index: any) => ({ ...apiKey, key: apiKey._id || index })
+  );
+
   return (
     <div>
       <h1>My API Keys</h1>
       <Table 
-        dataSource={apiKeys?.map((apiKey, index) => ({ ...apiKey, key: apiKey._id || index }))}
-         columns={columns} 
+        dataSource={data}
+        columns={columns} 
       />
       <Button
         type="primary"
