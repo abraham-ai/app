@@ -5,9 +5,9 @@ import axios from "axios";
 
 import { useGeneratorInfo } from "hooks/useGeneratorInfo";
 
-import ImageResult from "components/ImageResult";
-import VideoResult from "components/VideoResult";
-import AudioResult from "components/AudioResult";
+import ImageResult from "components/media/ImageResult";
+import VideoResult from "components/media/VideoResult";
+import AudioResult from "components/media/AudioResult";
 
 import UploadParameter from "components/parameters/UploadParameter";
 import StringParameter from "components/parameters/StringParameter";

@@ -6,13 +6,7 @@ import { Layout, Menu, theme } from 'antd';
 import type { MenuProps } from 'antd';
 
 import AccountTab from "components/tabs/AccountTab";
-// import CreateTab from "components/tabs/CreateTab";
-// import InterpolateTab from "components/tabs/InterpolateTab";
-// import Real2RealTab from "components/tabs/Real2RealTab";
-// import RemixTab from "components/tabs/RemixTab";
-// import TtsTab from "components/tabs/TtsTab";
 import MyProfileTab from "components/tabs/MyProfileTab";
-
 import GeneratorInterface from "components/GeneratorInterface"
 
 const { Header, Content, Footer, Sider } = Layout;
