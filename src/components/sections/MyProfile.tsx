@@ -1,6 +1,6 @@
-import { Button, Form, Table, InputNumber, DatePicker, Space } from "antd";
+import { Button, Form, Table, DatePicker, Space } from "antd";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import type { DatePickerProps } from 'antd';
 
 interface MyCreationsFormInputs {
@@ -8,11 +8,7 @@ interface MyCreationsFormInputs {
   dateto: number;
 }
 
-const MyProfileTab = () => {
-  const initialValues = {
-    datefrom: "1/1/2023",
-    dateto: new Date().toLocaleDateString(),
-  };
+const MyProfile = () => {
 
   const [form] = Form.useForm();
   const [creations, setCreations] = useState<object[]>([]);
@@ -105,4 +101,4 @@ const MyProfileTab = () => {
   );
 };
 
-export default MyProfileTab;
+export default MyProfile;
