@@ -1,9 +1,9 @@
 import { Divider } from "antd";
 import React from "react";
 
-import EthereumAuth from "components/tabs/AccountTab/EthereumAuth";
-import CreditBalance from "components/tabs/AccountTab/CreditBalance";
-import ApiKeys from "components/tabs/AccountTab/ApiKeys";
+import EthereumAuth from "components/sections/Account/EthereumAuth";
+import CreditBalance from "components/sections/Account/CreditBalance";
+import ApiKeys from "components/sections/Account/ApiKeys";
 
 const AccountTab = () => {
   return (

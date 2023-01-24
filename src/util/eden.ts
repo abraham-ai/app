@@ -1,4 +1,6 @@
 import axios from "axios";
+import fs from 'fs/promises'
+import FormData from 'form-data';
 
 const GATEWAY_URL = process.env.GATEWAY_URL;
 const MINIO_URL = process.env.MINIO_URL;
@@ -9,6 +11,39 @@ interface PollResponse {
   outputUrl: string | null;
   error: string | null;
 }
+
+export const createNewApiKey = async (authToken: string) => {
+  let response = await axios.post(GATEWAY_URL + "/api-key/create", {}, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+  const newApiKey = response.data;
+  return newApiKey;
+};
+
+export const getGenerator = async (generatorName: string | string[]) => {
+  const response = await axios.get(GATEWAY_URL + "/generators");
+  const generator = response.data.generators.filter(
+    (obj: { generatorName: string; }) => {
+      return obj.generatorName === generatorName
+    });
+  const latestGeneratorVersion = generator[0].versions[0];
+  return latestGeneratorVersion;
+};
+
+export const uploadMedia = async (authToken: string, filePath: string) => {
+  const media = await fs.readFile(filePath);
+  const form = new FormData();
+  form.append('media', media);
+  let response = await axios.post(GATEWAY_URL + "/media", form, {
+    headers: {
+      ...form.getHeaders(),
+      Authorization: `Bearer ${authToken}`,
+    }
+  });
+  return response.data;
+};
 
 export const submitPrediction = async (config: any, authToken: string) => {
   const { generatorName, requestConfig } = config;
@@ -71,8 +106,8 @@ export const getMyCreationsResult = async (
   await new Promise((r) => setTimeout(r, timeout));
   const response = userId
     ? await axios.post(GATEWAY_URL + "/fetch", {
-        userIds: [userId],
-      })
+      userIds: [userId],
+    })
     : { data: [] };
   return response;
 };
