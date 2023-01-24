@@ -5,9 +5,11 @@ import { withSessionRoute } from "util/withSession";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    console.log("go get generators")
     const generatorName = req.query.name;
     if (generatorName) {
       const generatorVersion = await getGenerator(generatorName);
+      console.log("get gen", generatorVersion)
       return res.status(200).json({ generatorVersion: generatorVersion });
     }
     else {

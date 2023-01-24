@@ -18,11 +18,11 @@ export const useGeneratorInfo = (generatorName: any) => {
     };
   }
 
-  const requiredParameters = data?.generatorVersion.defaultParameters.filter(
+  const requiredParameters = data?.generatorVersion.parameters.filter(
     (parameter: { optional: boolean; }) => !parameter.optional
   );
 
-  const optionalParameters = data?.generatorVersion.defaultParameters.filter(
+  const optionalParameters = data?.generatorVersion.parameters.filter(
     (parameter: { optional: boolean; }) => parameter.optional
   );
 

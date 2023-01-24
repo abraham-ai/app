@@ -5,11 +5,13 @@ import { useState } from "react";
 const SliderParameter = (props: {form: any, parameter: any}) => {
   const [value, setValue] = useState(props.parameter.defaultValue);
 
-  const onChange = (newValue: number) => {
-    setValue(newValue);
-    props.form.setFieldsValue({[props.parameter.name]: newValue});
+  const onChange = (newValue: number | null) => {
+    if (newValue !== null) {
+      setValue(newValue);
+      props.form.setFieldsValue({[props.parameter.name]: newValue});
+    }
   };
-
+  
   return (
     <>
       <Row>

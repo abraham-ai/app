@@ -1,9 +1,9 @@
 import GeneratorInterface from "components/GeneratorInterface";
 
-const Real2RealTab = () => {
+const InterpolateTab = () => {
   return (
-    <GeneratorInterface isVideo={true} generatorName="interpolate" />
+    <GeneratorInterface mediaType="video" generatorName="interpolate" />
   );
 };
 
-export default Real2RealTab;
+export default InterpolateTab;

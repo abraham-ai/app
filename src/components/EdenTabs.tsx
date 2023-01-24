@@ -10,6 +10,7 @@ import CreateTab from "components/tabs/CreateTab";
 import InterpolateTab from "components/tabs/InterpolateTab";
 import Real2RealTab from "components/tabs/Real2RealTab";
 import RemixTab from "components/tabs/RemixTab";
+import TtsTab from "components/tabs/TtsTab";
 import MyProfileTab from "components/tabs/MyProfileTab";
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -41,6 +42,7 @@ const items: MenuItem[] = [
     getItem('Interpolate', '6'),
     getItem('Real2Real', '7'),
     getItem('Remix', '8'),
+    getItem('TTS', '9'),
   ]),
 ];
 
@@ -71,6 +73,7 @@ const EdenTabs: React.FC = () => {
           {activeItem === '6' && <InterpolateTab />}
           {activeItem === '7' && <Real2RealTab />}
           {activeItem === '8' && <RemixTab />}
+          {activeItem === '9' && <TtsTab />}
         </Content>
         <Footer style={{ textAlign: 'center' }}></Footer>
       </Layout>

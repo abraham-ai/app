@@ -7,13 +7,15 @@ import { useGeneratorInfo } from "hooks/useGeneratorInfo";
 
 import ImageResult from "components/ImageResult";
 import VideoResult from "components/VideoResult";
+import AudioResult from "components/AudioResult";
+
 import UploadParameter from "components/parameters/UploadParameter";
 import StringParameter from "components/parameters/StringParameter";
 import OptionParameter from "components/parameters/OptionParameter";
 import SliderParameter from "components/parameters/SliderParameter";
 
 
-const GeneratorInterface = ({ generatorName, isVideo }: { generatorName: string, isVideo: boolean }) => {
+const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: string, mediaType: string }) => {
   const [form] = Form.useForm();
   const width = Form.useWatch("width", form);
   const height = Form.useWatch("height", form);
@@ -87,7 +89,7 @@ const GeneratorInterface = ({ generatorName, isVideo }: { generatorName: string,
       
       <div style={{backgroundColor: "#eee", padding: 10, borderRadius: 10, marginBottom: 10, width: "90%"}}>
         <h2>/{generatorName}</h2>
-        <h3 style={{color: "gray"}}>{versionId}</h3>
+        <h3>version: <span style={{color: "gray"}}>{versionId}</span></h3>
       </div>
 
       <div style={{padding:10}}>
@@ -121,11 +123,9 @@ const GeneratorInterface = ({ generatorName, isVideo }: { generatorName: string,
         {message && <p>{message}</p>}
         {resultUrl && (
           <>
-            {isVideo ? (
-              <VideoResult resultUrl={resultUrl} />
-            ) : (
-              <ImageResult width={width} height={height} imageUrl={resultUrl} />
-            )}
+            {mediaType=="image" && <ImageResult resultUrl={resultUrl} width={width} height={height} />}
+            {mediaType=="video" && <VideoResult resultUrl={resultUrl} />}
+            {mediaType=="audio" && <AudioResult resultUrl={resultUrl} />}
           </>
         )}
       </div>

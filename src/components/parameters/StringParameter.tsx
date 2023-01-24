@@ -26,7 +26,7 @@ const StringParameter = (props: {form: any, parameter: any}) => {
       {isArray ? (
         <>
           <Form.Item 
-            style={{ marginBottom: 5 }} 
+            style={{ marginBottom:5 }} 
             label={props.parameter.label} 
             name={props.parameter.name}
             rules={[{ 

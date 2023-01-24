@@ -2,7 +2,7 @@ import GeneratorInterface from "components/GeneratorInterface";
 
 const Real2RealTab = () => {
   return (
-    <GeneratorInterface isVideo={true} generatorName="real2real" />
+    <GeneratorInterface mediaType="video" generatorName="real2real" />
   );
 };
 

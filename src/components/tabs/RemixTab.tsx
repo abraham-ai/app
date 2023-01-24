@@ -1,9 +1,9 @@
 import GeneratorInterface from "components/GeneratorInterface";
 
-const Real2RealTab = () => {
+const RemixTab = () => {
   return (
-    <GeneratorInterface isVideo={false} generatorName="remix" />
+    <GeneratorInterface mediaType="image" generatorName="remix" />
   );
 };
 
-export default Real2RealTab;
+export default RemixTab;

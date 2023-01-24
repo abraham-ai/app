@@ -1,17 +1,17 @@
 import { Image } from "antd";
 
 const ImageResult = ({
-  imageUrl,
+  resultUrl,
   width,
   height,
 }: {
-  imageUrl: string;
+  resultUrl: string;
   width: number;
   height: number;
 }) => {
   return (
     <Image
-      src={imageUrl}
+      src={resultUrl}
       width={width}
       height={height}
       alt="result"
