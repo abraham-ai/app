@@ -8,7 +8,7 @@ interface MyCreationsFormInputs {
   dateto: number;
 }
 
-const MyProfile = () => {
+const Profile = () => {
 
   const [form] = Form.useForm();
   const [creations, setCreations] = useState<object[]>([]);
@@ -18,7 +18,7 @@ const MyProfile = () => {
   const handleGenerate = async (values: MyCreationsFormInputs) => {
     setGenerating(true);
     try {
-      const response = await axios.post("/api/mycreations", {
+      const response = await axios.post("/api/creations", {
         ...values,
       });
       const data = response.data.creations &&
@@ -101,4 +101,4 @@ const MyProfile = () => {
   );
 };
 
-export default MyProfile;
+export default Profile;

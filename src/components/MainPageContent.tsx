@@ -6,7 +6,7 @@ import { Layout, Menu, theme } from 'antd';
 import type { MenuProps } from 'antd';
 
 import Account from "components/sections/Account";
-import MyProfile from "components/sections/MyProfile";
+import Profile from "components/sections/Profile";
 import GeneratorInterface from "components/sections/GeneratorInterface"
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -63,8 +63,8 @@ const MainPageContent = () => {
         </Header>
         <Content style={{ margin: '0 16px', padding: "16px", background: colorBgContainer }}>          
           {activeItem === '1' && <Account />}
-          {activeItem === '2' && <MyProfile />}
-          {activeItem === '3' && <MyProfile />}
+          {activeItem === '2' && <Profile />}
+          {activeItem === '3' && <Profile />}
 
           {activeItem === '5' && <GeneratorInterface mediaType="image" generatorName="create" />}
           {activeItem === '6' && <GeneratorInterface mediaType="video" generatorName="interpolate" />}
