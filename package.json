@@ -12,6 +12,8 @@
     "@rainbow-me/rainbowkit": "^0.8.1",
     "antd": "^5.0.7",
     "axios": "^1.2.1",
+    "dotenv": "^16.0.3",
+    "eden-sdk": "^0.1.12",
     "ethers": "^5.7.2",
     "iron-session": "^6.3.1",
     "next": "13.0.7",

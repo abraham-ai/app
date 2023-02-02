@@ -1,36 +1,32 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getGatewayResult } from "util/eden";
 import { withSessionRoute } from "util/withSession";
+import { eden } from "util/eden";
 
 interface ApiRequest extends NextApiRequest {
   body: {
     generatorName: string;
-    reqConfig: any;
+    config: any;
   };
 }
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
-  const { reqConfig, generatorName } = req.body;
+  const { config, generatorName } = req.body;
   const authToken = req.session.token;
-
-  const config = {
-    generatorName: generatorName,
-    requestConfig: reqConfig,
-  };
 
   if (!authToken) {
     return res.status(401).json({ error: "Not authenticated" });
   }
 
   try {
-    const result = await getGatewayResult(config, authToken);
-    if (result.error) {
-      return res.status(500).json({ error: result.error });
-    } else {
-      return res.status(200).json({ outputUrl: result.outputUrl });
-    }
+    // eden.setAuthToken(authToken);
+    // const result = await eden.create(generatorName, config);
+    // console.log(result);
+    // if (result.error) {
+    //   return res.status(500).json({ error: result.error });
+    // } else {
+    //   return res.status(200).json({ outputUrl: result.outputUrl });
+    // }
   } catch (error: any) {
-    console.log("Error")
     console.error(error);
     return res.status(500).json({ error: error.response.data });
   }

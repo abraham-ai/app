@@ -25,16 +25,16 @@ const Profile = () => {
         response.data.creations.map((creation: any) => {
           return {
             key: creation._id,
-            timestamp: creation.timestamp,
-            prompt: creation.config.text_input,
-            status: creation.status,
-            output: creation.output,
+            timestamp: creation.createdAt,
+            prompt: creation.task.config.text_input,
+            status: creation.task.status,
+            output: creation.uri,
           };
         }
       );
       setCreations(data);
     } catch (error: any) {
-      setMessage(`Error: ${error.response.data.error}`);
+      setMessage(`Error: ${error}`);
     }
     setGenerating(false);
   };
@@ -60,7 +60,7 @@ const Profile = () => {
       title: 'Output',
       dataIndex: 'output',
       key: 'output',
-      render: (output: string) => <a href={"https://minio.aws.abraham.fun/creations-stg/"+output}>download</a>,
+      render: (output: string) => <a href={output}>download</a>,
     },
   ];
   

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getMyCreationsResult } from "util/eden";
 import { withSessionRoute } from "util/withSession";
+import { eden } from "util/eden";
 
 interface ApiRequest extends NextApiRequest {
   body: {
@@ -18,10 +18,12 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const userId = req.session.userId;
-    const result = await getMyCreationsResult(userId);
-    return res.status(200).json({ creations: result.data });
-  } catch (error: any) {
+    // eden.setAuthToken(authToken);
+    // const userId = req.session.userId;
+    // const creations = await eden.getCreations(userId);
+    // return res.status(200).json({ creations: creations });
+  } 
+  catch (error: any) {
     if (error.response.data == "jwt expired") {
       return res.status(401).json({ error: "Authentication expired" });
     }
