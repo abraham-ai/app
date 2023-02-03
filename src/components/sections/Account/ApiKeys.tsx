@@ -9,13 +9,15 @@ const ApiKeys = () => {
   const { isConnected } = useAccount();
   const [apiKeyCreating, setApiKeyCreating] = useState(false);
   const [apiMessage, setApiMessage] = useState<string | null>(null);
-  const { apiKeys, mutate } = useApiKeys();
+  const { apiKeys, error, mutate } = useApiKeys();
 
   const handleCreateAPIKey = async () => {
     if (!isConnected) return;
     setApiKeyCreating(true);
     try {
-      await axios.post("/api/createkey");
+      await axios.post("/api/createkey", {
+        "note": "test"
+      });
       setApiKeyCreating(false);
       mutate();
     } catch (error: any) {
@@ -36,6 +38,11 @@ const ApiKeys = () => {
       key: 'apiSecret'
     },
     {
+      title: 'Note',
+      dataIndex: 'note',
+      key: 'note'
+    },
+    {
       title: 'Date created',
       dataIndex: 'createdAt',
       key: 'createdAt',
@@ -49,6 +56,7 @@ const ApiKeys = () => {
 
   return (
     <div>
+      {error && <p style={{color: "red"}}>{error}</p>}
       <h1>My API Keys</h1>
       <Table 
         dataSource={data}

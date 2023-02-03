@@ -30,13 +30,13 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
     Object.keys(requiredParameters).forEach((key) => {
       const name = requiredParameters[key].name;
       if (config[name] === undefined) {
-        config[name] = requiredParameters[key].defaultValue;
+        config[name] = requiredParameters[key].default;
       }
     });
     Object.keys(optionalParameters).forEach((key) => {
       const name = optionalParameters[key].name;
       if (config[name] === undefined) {
-        config[name] = optionalParameters[key].defaultValue;
+        config[name] = optionalParameters[key].default;
       }
     });
     return config;
@@ -66,7 +66,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
             <OptionParameter key={key} form={form} parameter={parameters[key]} />
           ) : (
             <>
-              {typeof parameters[key].defaultValue === "number" ? (
+              {typeof parameters[key].default === "number" ? (
                 <SliderParameter key={key} form={form} parameter={parameters[key]} />
               ) : (
                 <>

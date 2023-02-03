@@ -3,8 +3,8 @@ import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 
 const StringParameter = (props: {form: any, parameter: any}) => {
-  const [value, setValue] = useState(props.parameter.defaultValue);
-  const [values, setValues] = useState(new Array(props.parameter.minLength || 1).fill(props.parameter.defaultValue));
+  const [value, setValue] = useState(props.parameter.default);
+  const [values, setValues] = useState(new Array(props.parameter.minLength || 1).fill(props.parameter.default));
 
   const handleAddInput = () => {
     setValues([...values, ""]);
@@ -19,7 +19,7 @@ const StringParameter = (props: {form: any, parameter: any}) => {
     setValue(newValue);
   };
 
-  const isArray = Array.isArray(props.parameter.defaultValue);
+  const isArray = Array.isArray(props.parameter.default);
 
   return (
     <>

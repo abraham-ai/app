@@ -3,14 +3,14 @@ import { fetcher } from "util/fetcher";
 
 export const useApiKeys = () => {
   const { data, error, isLoading, mutate } = useSWR(
-    "/api/user/keys",
+    "/api/keys",
     fetcher
   );
 
   return {
     apiKeys: data?.apiKeys,
     isLoading,
-    error,
+    error: data?.error,
     mutate,
   };
 };

@@ -24,7 +24,7 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [urls, setUrls] = useState<string[]>([]);
 
-  const isArray = Array.isArray(props.parameter.defaultValue);
+  const isArray = Array.isArray(props.parameter.default);
   const maxUploads = isArray ? (props.parameter.maxLength || 3) : 1;
 
   const handleChange = (info: any) => {

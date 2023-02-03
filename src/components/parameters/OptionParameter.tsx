@@ -3,7 +3,7 @@ import { useState } from "react";
 
 
 const OptionParameter = (props: {form: any, parameter: any}) => {
-  const [value, setValue] = useState(props.parameter.defaultValue);
+  const [value, setValue] = useState(props.parameter.default);
 
   const options = Object.keys(props.parameter.allowedValues).map((key) => {
     return {
@@ -32,13 +32,13 @@ const OptionParameter = (props: {form: any, parameter: any}) => {
             style={{marginBottom: 5}} 
             label={props.parameter.label} 
             name={props.parameter.name}
-            initialValue={props.parameter.defaultValue}
+            initialValue={props.parameter.default}
             rules={[{ 
               required: props.parameter.isRequired, 
               message: `${props.parameter.label} required`
             }]}
           >      
-            {typeof props.parameter.defaultValue === "boolean" ? (
+            {typeof props.parameter.default === "boolean" ? (
               <Switch
                 checked={value}
                 onChange={onSwitchChange}

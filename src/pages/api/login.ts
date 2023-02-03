@@ -13,15 +13,22 @@ interface ApiRequest extends NextApiRequest {
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const { message, signature, userAddress } = req.body;
-  
+
   try {
-    const token = await eden.loginEth(
+    console.log("1iowdf")
+    console.log(eden);
+    const result = await eden.loginEth(
       message, 
       signature, 
       userAddress
     );
+console.log("2iowdf")
+console.log(result);
+    if (result.error) {
+      return res.status(500).json({ error: result.error });
+    }
 
-    req.session.token = token;
+    req.session.token = result.token;
     req.session.userId = userAddress;
     await req.session.save();
 

@@ -1,15 +1,15 @@
 import useSWR from "swr";
 import { fetcher } from "util/fetcher";
 
-export const useCreditBalance = () => {
+export const useMannaBalance = () => {
   const { data, error, isLoading, mutate } = useSWR(
-    "/api/user/balance",
+    "/api/manna",
     fetcher
   );
   return {
-    balance: data?.balance,
+    manna: data?.manna,
     isLoading,
-    error,
+    error: data?.error,
     mutate,
   };
 };

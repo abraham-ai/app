@@ -10,9 +10,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    // eden.setAuthToken(authToken);
-    // const apiKeys = await eden.getApiKeys();
-    // return res.status(200).json({ apiKeys: apiKeys });
+    eden.setAuthToken(authToken);
+    const result = await eden.getApiKeys();
+    return res.status(200).json({ apiKeys: result.apiKeys });
   } catch (error: any) {
     console.error(error);
     return res.status(500).json({ error: error.response.data });

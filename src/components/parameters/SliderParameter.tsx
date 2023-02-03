@@ -3,7 +3,7 @@ import { useState } from "react";
 
 
 const SliderParameter = (props: {form: any, parameter: any}) => {
-  const [value, setValue] = useState(props.parameter.defaultValue);
+  const [value, setValue] = useState(props.parameter.default);
 
   const onChange = (newValue: number | null) => {
     if (newValue !== null) {
@@ -20,7 +20,7 @@ const SliderParameter = (props: {form: any, parameter: any}) => {
             style={{ marginBottom: 5 }} 
             label={props.parameter.label} 
             name={props.parameter.name}
-            initialValue={props.parameter.defaultValue} 
+            initialValue={props.parameter.default} 
             rules={[{ 
               required: props.parameter.isRequired, 
               message: `${props.parameter.label} required`
