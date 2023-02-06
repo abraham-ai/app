@@ -1,4 +1,4 @@
-import {EdenClient} from 'eden-sdk';
+import EdenClient from 'eden-sdk';
 
 console.log("LOAD IT")
 console.log(EdenClient)
