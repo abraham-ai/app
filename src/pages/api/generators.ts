@@ -4,7 +4,7 @@ import { eden } from "util/eden";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const generatorName = req.query.name;
+    const generatorName = req.query.name as string;
     if (generatorName) {
       const generatorVersion = await eden.getGenerator(generatorName);
       return res.status(200).json({ generatorVersion: generatorVersion });
