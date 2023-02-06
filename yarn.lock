@@ -2822,8 +2822,10 @@ duplexify@^4.1.2:
     readable-stream "^3.1.1"
     stream-shift "^1.0.0"
 
-eden-sdk@../eden-sdk:
-  version "0.1.24"
+eden-sdk@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/eden-sdk/-/eden-sdk-0.2.0.tgz#c5d38542ed505e7af9f4e6ca8166efcb419719d3"
+  integrity sha512-6fxVsL6VrqcdMW4e/MmNpvw/61ZZGOLh17Th4SYwmYQQcXXxWSYBFmRIe1wTJfEawuujrVSdokm2lG4Ijj/8qQ==
   dependencies:
     axios "^1.2.4"
     dotenv "^16.0.3"
