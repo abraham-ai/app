@@ -8,14 +8,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!authToken) {
     return res.status(401).json({ error: "Not authenticated" });
   }
-  console.log("LETS GO!!!")
+
   try {
-    console.log("LETS GO 111!!!")
-    console.log(authToken)
-    console.log(eden)
-    console.log(eden.setAuthToken)
     eden.setAuthToken(authToken);
-    console.log("LETS GO 222!!!")
     const result = await eden.getManna();
     
     if (result.error) {
