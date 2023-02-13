@@ -20,6 +20,8 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   try {
     eden.setAuthToken(authToken);
     const result = await eden.create(generatorName, config);
+    console.log("RESULT")
+    console.log(result);
     if (result.error) {
       return res.status(500).json({ error: result.error });
     } else {
