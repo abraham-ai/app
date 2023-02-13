@@ -18,10 +18,13 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    // eden.setAuthToken(authToken);
-    // const userId = req.session.userId;
-    // const creations = await eden.getCreations(userId);
-    // return res.status(200).json({ creations: creations });
+    eden.setAuthToken(authToken);
+    const userId = req.session.userId;
+    const filter = {
+      userId: userId
+    };
+    const creations = await eden.getCreations(filter);
+    return res.status(200).json({ creations: creations });
   } 
   catch (error: any) {
     if (error.response.data == "jwt expired") {

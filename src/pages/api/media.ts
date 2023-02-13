@@ -11,28 +11,35 @@ export const config = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const authToken = req.session.token;
-
+  
   if (!authToken) {
     return res.status(401).json({ error: "Not authenticated" });
   }
-
+  
   const form = new formidable.IncomingForm();
-  form.parse(req, async (error, _, files) => {
-    if (error) {
-      return res.status(500).json({error: `Error parsing form`});
-    }
-    try {
-      eden.setAuthToken(authToken);
-      const file = files.file as formidable.File;
-      const result = await eden.uploadMedia(file.filepath);
-      if (result.error) {
-        return res.status(500).json({ error: result.error });
-      } else {
-        return res.status(200).json({ fileUrl: result.url })
+
+  return new Promise((resolve, reject) => {
+    form.parse(req, async (error, _, files) => {
+      if (error) {
+        return reject(error);
       }
-    } catch (error: any) {
-      return res.status(500).json({ error: error.response?.data });
-    }
+      try {
+        eden.setAuthToken(authToken);
+        const file = files.file as formidable.File;
+        const result = await eden.uploadMedia(file.filepath);
+        if (result.error) {
+          return reject(result.error);
+        } else {
+          resolve({ fileUrl: result.url });
+        }
+      } catch (error: any) {
+        reject(error.response?.data);
+      }
+    });
+  }).then(result => {
+    return res.status(200).json(result);
+  }).catch(error => {
+    return res.status(500).json({ error });
   });
 }
 

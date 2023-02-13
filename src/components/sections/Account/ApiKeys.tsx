@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Input, Table } from "antd";
 import axios from "axios";
 import React, { useState } from "react";
 import { useAccount } from "wagmi";
@@ -9,6 +9,7 @@ const ApiKeys = () => {
   const { isConnected } = useAccount();
   const [apiKeyCreating, setApiKeyCreating] = useState(false);
   const [apiMessage, setApiMessage] = useState<string | null>(null);
+  const [note, setNote] = useState("");
   const { apiKeys, error, mutate } = useApiKeys();
 
   const handleCreateAPIKey = async () => {
@@ -16,7 +17,7 @@ const ApiKeys = () => {
     setApiKeyCreating(true);
     try {
       await axios.post("/api/createkey", {
-        "note": "test"
+        note: note
       });
       setApiKeyCreating(false);
       mutate();
@@ -24,6 +25,10 @@ const ApiKeys = () => {
       setApiMessage(`Error: ${error.response.data.error}`);
       setApiKeyCreating(false);
     }
+  };
+
+  const handleNoteChange = (e: any) => {
+    setNote(e.target.value);
   };
 
   const columns = [
@@ -62,6 +67,14 @@ const ApiKeys = () => {
         dataSource={data}
         columns={columns} 
       />
+      <h1>Create new key</h1>
+      <Input
+        placeholder="Note about this key"
+        value={note}
+        style={{ width: "50%", marginTop: 10, marginBottom: 10 }}
+        onChange={handleNoteChange}
+      />
+      <br/>
       <Button
         type="primary"
         onClick={handleCreateAPIKey}

@@ -65,7 +65,7 @@ const Profile = () => {
   ];
   
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
+    // console.log(date, dateString);
   };
   
   return (

@@ -8,6 +8,7 @@ import { useGeneratorInfo } from "hooks/useGeneratorInfo";
 import ImageResult from "components/media/ImageResult";
 import VideoResult from "components/media/VideoResult";
 import AudioResult from "components/media/AudioResult";
+import TextResult from "components/media/TextResult";
 
 import UploadParameter from "components/parameters/UploadParameter";
 import StringParameter from "components/parameters/StringParameter";
@@ -22,9 +23,10 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
 
   const [resultUrl, setResultUrl] = useState<string>("");
   const [generating, setGenerating] = useState<boolean>(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [showOptional, setShowOptional] = useState<boolean>(false);
   const {versionId, requiredParameters, optionalParameters} = useGeneratorInfo(generatorName);
+  const allParameters = [...requiredParameters, ...optionalParameters];
   
   const getConfig = (config: any) => {
     Object.keys(requiredParameters).forEach((key) => {
@@ -42,19 +44,46 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
     return config;
   }
 
+  const validateConfig = (values: any) => {
+    for (const v in values) {
+      const param = allParameters.find((parameter: any) => parameter.name === v);
+      if (param.minLength) {
+        if (values[v].length < param.minLength) {
+          setError(`Error: ${v} must have at least ${param.minLength} elements`);
+          return false;
+        }
+      }
+      if (param.maxLength) {
+        if (values[v].length >= param.maxLength) {
+          setError(`Error: ${v} must have no more than ${param.maxLength} elements`);
+          setGenerating(false);
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   const handleGenerate = async (values: any) => {
     setGenerating(true);
-    setMessage(null);
+    setError(null);
+
+    if (!validateConfig(values)) {
+      setGenerating(false);
+      return;
+    }
+
     try {
       const config = getConfig(values);
       const response = await axios.post("/api/generate", {
         generatorName: generatorName,
         config: config,
-      });  
-      setResultUrl(response.data.outputUrl);      
+      });
+      setResultUrl(response.data.creation.uri);      
     } catch (error: any) {
-      setMessage(`Error: ${error.response.data.error}`);
+      setError(`Error: ${error.message}`);
     }
+
     setGenerating(false);
   };
   
@@ -120,12 +149,13 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
             </Button>
           </Form.Item>
         </Form>
-        {message && <p>{message}</p>}
+        {error && <p style={{color: "red"}}>{error}</p>}
         {resultUrl && (
           <>
             {mediaType=="image" && <ImageResult resultUrl={resultUrl} width={width} height={height} />}
             {mediaType=="video" && <VideoResult resultUrl={resultUrl} />}
             {mediaType=="audio" && <AudioResult resultUrl={resultUrl} />}
+            {mediaType=="text" && <TextResult resultUrl={resultUrl} />}
           </>
         )}
       </div>

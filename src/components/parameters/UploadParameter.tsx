@@ -1,6 +1,6 @@
 import { Form, Row } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Modal, Upload } from 'antd';
 import type { RcFile } from 'antd/es/upload';
@@ -29,7 +29,7 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
 
   const handleChange = (info: any) => {
     setFileList(info.fileList);
-    if (info.file.status === 'done') {
+    if (info.file.status === 'done') {  
       const newUrls = [...urls, info.file.response.fileUrl];
       props.form.setFieldsValue({ [props.parameter.name]: 
         isArray ? newUrls : newUrls[0] 
@@ -72,7 +72,7 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
             action="/api/media"
             listType="picture-card"
             fileList={fileList}
-            multiple={isArray}
+            // multiple={isArray}
             onChange={handleChange}
             onPreview={handlePreview}
           >
@@ -102,3 +102,56 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
 
 
 export default UploadParameter;
+
+
+
+/*
+TODO: fix multiple uploads
+
+const handleChangeOld = (info: any) => {
+    // setFileList(info.fileList);
+
+    let newFileList = [...fileList];
+
+    for (let i = 0; i < info.fileList.length; i++) {
+      const fileUpdate = info.fileList[i];
+
+      let foundMatch = false;
+      for (let j = 0; j < newFileList.length; j++) {
+        const file = newFileList[j];
+        if (file.uid === fileUpdate.uid) {
+          foundMatch = true;
+          if (file.status == "done") {
+            console.log("no changes because already done")
+            // return file;
+          } else if (file.percent > fileUpdate.percent) {
+            console.log("no changes because percent is higher")
+          } else {
+            newFileList[j] = fileUpdate;            
+          }
+        }
+      }
+      if (!foundMatch) {
+        newFileList.push(fileUpdate);
+      }
+    }
+    
+    setFileList(newFileList)
+
+    if (info.file.status === 'done') {  
+      const newUrls = [...urls, info.file.response.fileUrl];
+      props.form.setFieldsValue({ [props.parameter.name]: 
+        isArray ? newUrls : newUrls[0] 
+      });
+      setUrls(newUrls);
+    }
+    if (info.file.status === 'removed') {
+      const removedUrl = info.file.response.fileUrl;
+      const newUrls = urls.filter(url => url !== removedUrl);
+      props.form.setFieldsValue({ [props.parameter.name]: 
+        isArray ? newUrls : newUrls[0] 
+      });
+      setUrls(newUrls);
+    }
+  }
+  */

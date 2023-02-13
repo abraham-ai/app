@@ -92,6 +92,7 @@ const StringParameter = (props: {form: any, parameter: any}) => {
               >
                 <Input 
                   value={value} 
+                  defaultValue={props.parameter.default}
                   onChange={event => {setValue(event.target.value)}}
                 />
               </Form.Item>

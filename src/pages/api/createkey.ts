@@ -4,14 +4,13 @@ import { eden } from "util/eden";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const authToken = req.session.token;
+  const { note } = req.body;
 
   if (!authToken) {
     return res.status(401).json({ error: "Not authenticated" });
   }
 
   try {
-    const note = "test";
-    
     eden.setAuthToken(authToken);
     const newApiKey = await eden.createNewApiKey(note);
     return res.status(200).json(newApiKey);
