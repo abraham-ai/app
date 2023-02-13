@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         eden.setAuthToken(authToken);
         const file = files.file as formidable.File;
-        const result = await eden.uploadMedia(file.filepath);
+        const result = await eden.uploadFile(file.filepath);
         if (result.error) {
           return reject(result.error);
         } else {
