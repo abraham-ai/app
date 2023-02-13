@@ -24,10 +24,14 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     console.log(generatorName);
     console.log("config");
     console.log(config);
+    console.log("lets do a job....");
     const result = await eden.create(generatorName, config);
     console.log("THE RESULT ...")
     console.log(result);
     if (result.error) {
+      console.log("I GOT AN ERROR")
+      console.log(result.error);
+      console.log("====================================");
       return res.status(500).json({ error: result.error });
     } else {
       console.log("result.task.output");
@@ -35,7 +39,10 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
       return res.status(200).json({ creation: result });
     }
   } catch (error: any) {
-    return res.status(500).json({ error: error });
+    console.log("I GOT AN ERROR 22")
+    console.log(error);
+    console.log("====================================");
+  return res.status(500).json({ error: error });
   }
 };
 
