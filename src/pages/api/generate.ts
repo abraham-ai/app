@@ -25,7 +25,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     } else {
       console.log("result.task.output");
       console.log(result);
-      return res.status(200).json({ creation: result.task.output[0] });
+      return res.status(200).json({ creation: result });
     }
   } catch (error: any) {
     return res.status(500).json({ error: error });

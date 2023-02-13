@@ -79,6 +79,8 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         generatorName: generatorName,
         config: config,
       });
+      console.log("THE RESPONSe")
+      console.log(response.data)
       setResultUrl(response.data.creation.uri);      
     } catch (error: any) {
       setError(`Error: ${error.message}`);
