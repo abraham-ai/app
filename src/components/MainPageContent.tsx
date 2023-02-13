@@ -38,9 +38,10 @@ const items: MenuItem[] = [
     getItem('Interpolate', '6'),
     getItem('Real2Real', '7'),
     getItem('Remix', '8'),
-    getItem('TTS', '9'),
-    getItem('Wav2Lip', '10'),
-    getItem('Complete', '11'),
+    getItem('Interrogate', '9'),
+    getItem('TTS', '10'),
+    getItem('Wav2Lip', '11'),
+    getItem('Complete', '12'),
   ]),
 ];
 
@@ -72,9 +73,10 @@ const MainPageContent = () => {
           {activeItem === '6' && <GeneratorInterface mediaType="video" generatorName="interpolate" />}
           {activeItem === '7' && <GeneratorInterface mediaType="video" generatorName="real2real" />}
           {activeItem === '8' && <GeneratorInterface mediaType="image" generatorName="remix" />}
-          {activeItem === '9' && <GeneratorInterface mediaType="audio" generatorName="tts" />}
-          {activeItem === '10' && <GeneratorInterface mediaType="video" generatorName="wav2lip" />}
-          {activeItem === '11' && <GeneratorInterface mediaType="text" generatorName="complete" />}
+          {activeItem === '9' && <GeneratorInterface mediaType="text" generatorName="interrogate" />}
+          {activeItem === '10' && <GeneratorInterface mediaType="audio" generatorName="tts" />}
+          {activeItem === '11' && <GeneratorInterface mediaType="video" generatorName="wav2lip" />}
+          {activeItem === '12' && <GeneratorInterface mediaType="text" generatorName="complete" />}
 
         </Content>
         <Footer style={{ textAlign: 'center' }}></Footer>

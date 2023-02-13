@@ -129,10 +129,14 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         >
           {renderFormFields(requiredParameters)}
           <h3 style={{padding: 5}}>
-            {showOptional ? (
-              <Button onClick={() => setShowOptional(false)}><UpCircleOutlined/>Hide optional settings</Button>
-            ) : (
-              <Button onClick={() => setShowOptional(true)}><DownCircleOutlined/>Show optional settings</Button>
+            {optionalParameters.length > 0 && (
+              <>
+              {showOptional ? (
+                <Button onClick={() => setShowOptional(false)}><UpCircleOutlined/>Hide optional settings</Button>
+              ) : (
+                <Button onClick={() => setShowOptional(true)}><DownCircleOutlined/>Show optional settings</Button>
+              )}
+              </>
             )}
           </h3>
           {showOptional && renderFormFields(optionalParameters)}
