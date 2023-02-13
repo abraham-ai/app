@@ -75,11 +75,13 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
 
     try {
       const config = getConfig(values);
+      console.log("the config...")
+      console.log(config);
       const response = await axios.post("/api/generate", {
         generatorName: generatorName,
         config: config,
       });
-      console.log("response...")
+      console.log("the response...")
       console.log(response.data)
       setResultUrl(response.data.creation.uri);      
     } catch (error: any) {
