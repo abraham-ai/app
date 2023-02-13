@@ -41,8 +41,11 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   } catch (error: any) {
     console.log("I GOT AN ERROR 22")
     console.log(error);
+    console.log(error.response.data);
+    // send back the actual error
+    
     console.log("====================================");
-  return res.status(500).json({ error: error });
+  return res.status(500).json({ error: error.response.data });
   }
 };
 

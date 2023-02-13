@@ -85,7 +85,10 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
       console.log(response.data)
       setResultUrl(response.data.creation.uri);      
     } catch (error: any) {
-      setError(`Error: ${error.message}`);
+      console.log("GOT THIS ERORR")
+      console.log(error);
+      console.log(error.response.data);
+      setError(`Error: ${error.response.data.error}`);
     }
 
     setGenerating(false);

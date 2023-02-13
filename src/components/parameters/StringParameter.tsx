@@ -85,6 +85,7 @@ const StringParameter = (props: {form: any, parameter: any}) => {
                 style={{ marginBottom:5 }} 
                 label={props.parameter.label} 
                 name={props.parameter.name}
+                initialValue={props.parameter.default}
                 rules={[{ 
                   required: props.parameter.isRequired, 
                   message: `${props.parameter.label} required`
@@ -92,7 +93,6 @@ const StringParameter = (props: {form: any, parameter: any}) => {
               >
                 <Input 
                   value={value} 
-                  defaultValue={props.parameter.default}
                   onChange={event => {setValue(event.target.value)}}
                 />
               </Form.Item>
