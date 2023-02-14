@@ -218,13 +218,23 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
             {creation && creation.attributes && Object.keys(creation.attributes).length > 0 && (
               <>
                 <h3>Attributes</h3>
-                {Object.keys(creation.attributes).map((key) => {
-                  return (
-                    <p key={key}>
-                      <b>{key}</b>: {creation.attributes[key]}
-                    </p>
-                  );
-                })}
+                <ul>
+                  {Object.keys(creation.attributes).map((key) => {
+                    return (
+                      <li key={key}>
+                        <b>{key}</b>: { Array.isArray(creation.attributes[key]) ? (
+                          <>
+                            {creation.attributes[key].map((item: any) => {
+                              return <>{item}<br/></>;
+                            })}
+                          </>
+                        ) : (
+                          <>creation.attributes[key]</>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
               </>
             )}
           </div>
