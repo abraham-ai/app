@@ -4,13 +4,12 @@ import { eden } from "util/eden";
 
 interface ApiRequest extends NextApiRequest {
   body: {
-    generatorName: string;
-    config: any;
+    taskId: string;
   };
 }
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
-  const { config, generatorName } = req.body;
+  const { taskId } = req.body;
   const authToken = req.session.token;
 
   if (!authToken) {
@@ -19,15 +18,20 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
 
   try {
     eden.setAuthToken(authToken);
-    const result = await eden.startTask(generatorName, config);
+    const result = await eden.getTaskStatus(taskId);
     if (result.error) {
       return res.status(500).json({ error: result.error });
     } 
     else {
-      console.log(`Starting task ${result.taskId}...`)
-      return res.status(200).json({ taskId: result.taskId });
+      let response = { task: result.task }
+      if (result.task && result.task.creation) {
+        const creation = await eden.getCreation(result.task.creation);
+        Object.assign(response, { creation: creation });  
+      };
+      return res.status(200).json(response);
     }
   } catch (error: any) {
+    console.log(error)
     return res.status(500).json({ error: error.response.data });
   }
 };

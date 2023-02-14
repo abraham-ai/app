@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form } from "antd";
 import { RightCircleOutlined, UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 import axios from "axios";
@@ -21,11 +21,14 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   const width = Form.useWatch("width", form);
   const height = Form.useWatch("height", form);
 
-  const [resultUrl, setResultUrl] = useState<string>("");
+  const [values, setValues] = useState({});
+  const [taskId, setTaskId] = useState<string>("");
+  const [creation, setCreation] = useState<any>(null);
   const [generating, setGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showOptional, setShowOptional] = useState<boolean>(false);
   const {versionId, requiredParameters, optionalParameters} = useGeneratorInfo(generatorName);
+
   const allParameters = [...requiredParameters, ...optionalParameters];
   
   const getConfig = (config: any) => {
@@ -46,6 +49,9 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
 
   const validateConfig = (values: any) => {
     for (const v in values) {
+      if (!values[v]) {
+        continue;
+      }
       const param = allParameters.find((parameter: any) => parameter.name === v);
       if (param.minLength) {
         if (values[v].length < param.minLength) {
@@ -56,7 +62,6 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
       if (param.maxLength) {
         if (values[v].length >= param.maxLength) {
           setError(`Error: ${v} must have no more than ${param.maxLength} elements`);
-          setGenerating(false);
           return false;
         }
       }
@@ -64,35 +69,70 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
     return true;
   }
 
-  const handleGenerate = async (values: any) => {
-    setGenerating(true);
-    setError(null);
+  const pollForResult = async (taskId: string, pollingInterval: number = 2000) => {
+    let response = await axios.post("/api/fetch", {taskId: taskId});
+    let task = response.data.task;
 
-    if (!validateConfig(values)) {
-      setGenerating(false);
-      return;
+    while (
+      task.status == "pending" ||
+      task.status == "starting" ||
+      task.status == "running"
+    ) {
+      await new Promise((r) => setTimeout(r, pollingInterval));
+      response = await axios.post("/api/fetch", {taskId: taskId});
+      task = response.data.task;
     }
 
-    try {
-      const config = getConfig(values);
-      console.log("the config...")
-      console.log(config);
-      const response = await axios.post("/api/generate", {
-        generatorName: generatorName,
-        config: config,
-      });
-      console.log("the response...")
-      console.log(response.data)
-      setResultUrl(response.data.creation.uri);      
-    } catch (error: any) {
-      console.log("GOT THIS ERORR")
-      console.log(error);
-      console.log(error.response.data);
-      setError(`Error: ${error.response.data.error}`);
-    }
+    if (task.status == "failed") {
+      throw new Error(task.error.message);
+    } else if (!response.data.creation) {
+      throw new Error("No creation found");
+    };
 
-    setGenerating(false);
+    return response.data.creation;
   };
+
+  const handleFinish = (formValues: any) => {
+    setValues(formValues);
+  };
+
+  useEffect(() => {
+    const requestCreation = async (values: any) => {
+    
+      setGenerating(true);
+      setError(null);
+
+      if (!validateConfig(values)) {
+        setGenerating(false);
+        return;
+      }
+
+      try {
+        const config = getConfig(values);
+        const response = await axios.post("/api/generate", {
+          generatorName: generatorName,
+          config: config,
+        });
+        const newTaskId = response.data.taskId;
+        setTaskId(newTaskId);
+        const creation = await pollForResult(newTaskId);
+        setCreation(creation);
+      } 
+      catch (error: any) {
+        if (error.message) {
+          setError(`Error: ${error.message}`);
+        } else {
+          setError(`Error: ${error.response.data.error}`);
+        }
+      }
+      setGenerating(false);
+    };
+
+    if (Object.keys(values).length > 0) {
+      requestCreation(values);
+    }
+
+  }, [values]);
   
   const renderFormFields = (parameters: any) => {
     return Object.keys(parameters).map((key) => {
@@ -132,7 +172,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         <Form
           form={form}
           name="generate"
-          onFinish={handleGenerate}
+          onFinish={handleFinish}
         >
           {renderFormFields(requiredParameters)}
           <h3 style={{padding: 5}}>
@@ -160,15 +200,35 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
             </Button>
           </Form.Item>
         </Form>
-        {error && <p style={{color: "red"}}>{error}</p>}
-        {resultUrl && (
-          <>
-            {mediaType=="image" && <ImageResult resultUrl={resultUrl} width={width} height={height} />}
-            {mediaType=="video" && <VideoResult resultUrl={resultUrl} />}
-            {mediaType=="audio" && <AudioResult resultUrl={resultUrl} />}
-            {mediaType=="text" && <TextResult resultUrl={resultUrl} />}
-          </>
-        )}
+
+        <div id="result" style={{display: "flex", flexDirection: "row"}}>
+          <div id="resultLeft" style={{flexBasis: "auto", flexGrow: 0, padding: 10}}>
+            {creation && creation.uri && (
+              <>
+                {mediaType=="image" && <ImageResult resultUrl={creation.uri} width={width} height={height} />}
+                {mediaType=="video" && <VideoResult resultUrl={creation.uri} />}
+                {mediaType=="audio" && <AudioResult resultUrl={creation.uri} />}
+                {mediaType=="text" && <TextResult resultUrl={creation.uri} />}
+              </>
+            )}
+          </div>
+          <div id="resultRight" style={{flexBasis: "auto", flexGrow: 1, padding: 10}}>
+            {taskId && <h3>Task Id: {taskId}</h3>}
+            {error && <p style={{color: "red"}}>{error}</p>}
+            {creation && creation.attributes && Object.keys(creation.attributes).length > 0 && (
+              <>
+                <h3>Attributes</h3>
+                {Object.keys(creation.attributes).map((key) => {
+                  return (
+                    <p key={key}>
+                      <b>{key}</b>: {creation.attributes[key]}
+                    </p>
+                  );
+                })}
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
