@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form } from "antd";
+import { Button, Form, Progress } from "antd";
 import { RightCircleOutlined, UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 import axios from "axios";
 
@@ -22,6 +22,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   const height = Form.useWatch("height", form);
 
   const [values, setValues] = useState({});
+  const [progress, setProgress] = useState<number>(0);
   const [taskId, setTaskId] = useState<string>("");
   const [creation, setCreation] = useState<any>(null);
   const [generating, setGenerating] = useState<boolean>(false);
@@ -81,6 +82,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
       await new Promise((r) => setTimeout(r, pollingInterval));
       response = await axios.post("/api/fetch", {taskId: taskId});
       task = response.data.task;
+      setProgress(task.progress);
     }
 
     if (task.status == "failed") {
@@ -215,6 +217,8 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           <div id="resultRight" style={{flexBasis: "auto", flexGrow: 1, padding: 10}}>
             {taskId && <h3>Task Id: {taskId}</h3>}
             {error && <p style={{color: "red"}}>{error}</p>}
+            {progress && <Progress percent={progress} />}
+            {progress && <p>{progress}</p>}
             {creation && creation.attributes && Object.keys(creation.attributes).length > 0 && (
               <>
                 <h3>Attributes</h3>
@@ -229,7 +233,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
                             })}
                           </>
                         ) : (
-                          <>creation.attributes[key]</>
+                          <>{creation.attributes[key]}</>
                         )}
                       </li>
                     );
