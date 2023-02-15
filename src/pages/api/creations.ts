@@ -6,11 +6,12 @@ interface ApiRequest extends NextApiRequest {
   body: {
     datefrom: number;
     dateto: number;
+    username: string;
   };
 }
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
-  const { datefrom, dateto } = req.body;
+  const { datefrom, dateto, username } = req.body;
   const authToken = req.session.token;
 
   if (!authToken) {
@@ -19,9 +20,9 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
 
   try {
     eden.setAuthToken(authToken);
-    const userId = req.session.userId;
+    // const userId = req.session.userId;
     const filter = {
-      userId: userId
+      username: username
     };
     const creations = await eden.getCreations(filter);
     return res.status(200).json({ creations: creations });

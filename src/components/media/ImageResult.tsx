@@ -2,12 +2,12 @@ import { Image } from "antd";
 
 const ImageResult = ({
   resultUrl,
-  width,
-  height,
+  width = undefined,
+  height = undefined,
 }: {
   resultUrl: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 }) => {
   return (
     <Image

@@ -82,7 +82,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
       await new Promise((r) => setTimeout(r, pollingInterval));
       response = await axios.post("/api/fetch", {taskId: taskId});
       task = response.data.task;
-      setProgress(task.progress);
+      setProgress(Math.floor(100*task.progress));
     }
 
     if (task.status == "failed") {
@@ -127,6 +127,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           setError(`Error: ${error.response.data.error}`);
         }
       }
+
       setGenerating(false);
     };
 
@@ -215,10 +216,11 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
             )}
           </div>
           <div id="resultRight" style={{flexBasis: "auto", flexGrow: 1, padding: 10}}>
-            {taskId && <h3>Task Id: {taskId}</h3>}
+            {generating && <>
+              {taskId && <h3>Task Id: {taskId}</h3>}
+              <Progress style={{width: "25%"}} percent={progress} />
+            </>}
             {error && <p style={{color: "red"}}>{error}</p>}
-            {progress && <Progress percent={progress} />}
-            {progress && <p>{progress}</p>}
             {creation && creation.attributes && Object.keys(creation.attributes).length > 0 && (
               <>
                 <h3>Attributes</h3>
@@ -226,12 +228,13 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
                   {Object.keys(creation.attributes).map((key) => {
                     return (
                       <li key={key}>
-                        <b>{key}</b>: { Array.isArray(creation.attributes[key]) ? (
-                          <>
+                        <b>{key}</b>: 
+                        {Array.isArray(creation.attributes[key]) ? (
+                          <ul>
                             {creation.attributes[key].map((item: any) => {
-                              return <>{item}<br/></>;
+                              return <li>{item}<br/></li>;
                             })}
-                          </>
+                          </ul>
                         ) : (
                           <>{creation.attributes[key]}</>
                         )}

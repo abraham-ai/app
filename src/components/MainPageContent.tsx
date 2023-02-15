@@ -31,7 +31,7 @@ const items: MenuItem[] = [
   getItem('User', 'sub1', <UserOutlined />, [
     getItem('My account', '1'),
     getItem('My creations', '2'),
-    getItem('My collections', '3'),
+    // getItem('My collections', '3'),
   ]),
   getItem('App', 'sub2', <ToolOutlined />, [
     getItem('Create', '5'), 

@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import { SiweMessage } from "siwe";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 
-const EthereumAuth = () => {
+type EthereumAuthProps = {
+  onSignIn: (signedIn: boolean) => void; // Specify the type of the onSignIn prop
+}
+
+const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
   const [ethAuthenticating, setEthAuthenticating] = useState(false);
@@ -19,8 +23,10 @@ const EthereumAuth = () => {
           userAddress: address,
         });
         setEthMessage("Successfully authenticated as " + address);
+        onSignIn(true);
       } catch (error: any) {
         setEthMessage("Error authenticating");
+        onSignIn(false);
       }
       setEthAuthenticating(false);
     },
@@ -51,16 +57,20 @@ const EthereumAuth = () => {
 
   return (
     <div>
-      <h1>Sign in with Ethereum</h1>
-      <Button
-        type="primary"
-        onClick={handleSiwe}
-        disabled={ethAuthenticating}
-        loading={ethAuthenticating}
-      >
-        Sign In
-      </Button>
-      {ethMessage && <p>{ethMessage}</p>}
+      {isConnected && (
+        <>
+          <h1>Sign in with Ethereum</h1>
+          <Button
+            type="primary"
+            onClick={handleSiwe}
+            disabled={ethAuthenticating}
+            loading={ethAuthenticating}
+          >
+            Sign In
+          </Button>
+          {ethMessage && <p>{ethMessage}</p>}
+        </>
+      )}
     </div>
   );
 };

@@ -21,7 +21,7 @@
     "react-dom": "18.2.0",
     "siwe": "^1.1.6",
     "swr": "^2.0.0",
-    "wagmi": "^0.10.14"
+    "wagmi": "^0.11.5"
   },
   "devDependencies": {
     "@types/formidable": "^2.0.5",
