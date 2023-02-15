@@ -135,7 +135,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
       requestCreation(values);
     }
 
-  }, [values]);
+  }, [values, generatorName, getConfig, validateConfig]);
   
   const renderFormFields = (parameters: any) => {
     return Object.keys(parameters).map((key) => {
@@ -232,7 +232,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
                         {Array.isArray(creation.attributes[key]) ? (
                           <ul>
                             {creation.attributes[key].map((item: any) => {
-                              return <li>{item}<br/></li>;
+                              return <li key={item}>{item}<br/></li>;
                             })}
                           </ul>
                         ) : (
