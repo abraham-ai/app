@@ -135,7 +135,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
       requestCreation(values);
     }
 
-  }, [values, generatorName, getConfig, validateConfig]);
+  }, [values]);
   
   const renderFormFields = (parameters: any) => {
     return Object.keys(parameters).map((key) => {
