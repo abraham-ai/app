@@ -20,6 +20,8 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     eden.setAuthToken(authToken);
     const result = await eden.getTaskStatus(taskId);
     if (result.error) {
+      console.log("result.error found")
+      console.log(result.error)
       return res.status(500).json({ error: result.error });
     } 
     else {
@@ -28,9 +30,13 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
         const creation = await eden.getCreation(result.task.creation);
         Object.assign(response, { creation: creation });  
       };
+      console.log("the response is")
+      console.log(response)
       return res.status(200).json(response);
     }
   } catch (error: any) {
+    console.log(error)
+    console.log("FETCH CAUGHT AN ERORR")
     console.log(error)
     return res.status(500).json({ error: error.response.data });
   }

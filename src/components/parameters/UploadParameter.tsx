@@ -1,4 +1,4 @@
-import { Form, Row } from "antd";
+import { Form, Row, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import React, { useState, useEffect } from "react";
 
@@ -28,6 +28,17 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
   const maxUploads = isArray ? (props.parameter.maxLength || 3) : 1;
 
   const handleChange = (info: any) => {
+    if (info.file.status === 'error') {
+      // Display an error message to the user
+      //message.error(`${info.file.name} failed to upload.`);
+      console.log("GOT AN ERROR")
+      console.log(info.file.name)
+      console.log("=-==-===")
+      console.log(info.file.error)
+      console.log("=-==-===!!!")
+      message.error(`${info.file.name} failed to upload.`);
+      return;
+    }
     setFileList(info.fileList);
     if (info.file.status === 'done') {  
       const newUrls = [...urls, info.file.response.fileUrl];

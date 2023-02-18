@@ -121,6 +121,8 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         setCreation(creation);
       } 
       catch (error: any) {
+        console.log("THIS IS THE RROR")
+        console.log(error)
         if (error.message) {
           setError(`Error: ${error.message}`);
         } else {
@@ -228,7 +230,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
                   {Object.keys(creation.attributes).map((key) => {
                     return (
                       <li key={key}>
-                        <b>{key}</b>: 
+                        <b>{key}</b>:&nbsp;:&nbsp;
                         {Array.isArray(creation.attributes[key]) ? (
                           <ul>
                             {creation.attributes[key].map((item: any) => {

@@ -8,6 +8,7 @@ import type { MenuProps } from 'antd';
 import Account from "components/sections/Account";
 import Profile from "components/sections/Profile";
 import GeneratorInterface from "components/sections/GeneratorInterface"
+import Player from "components/Player"
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -32,6 +33,7 @@ const items: MenuItem[] = [
     getItem('My account', '1'),
     getItem('My creations', '2'),
     // getItem('My collections', '3'),
+    getItem('Player', '3'),
   ]),
   getItem('App', 'sub2', <ToolOutlined />, [
     getItem('Create', '5'), 
@@ -67,7 +69,7 @@ const MainPageContent = () => {
         <Content style={{ margin: '0 16px', padding: "16px", background: colorBgContainer }}>          
           {activeItem === '1' && <Account />}
           {activeItem === '2' && <Profile />}
-          {activeItem === '3' && <Profile />}
+          {activeItem === '3' && <Player />}
 
           {activeItem === '5' && <GeneratorInterface mediaType="image" generatorName="create" />}
           {activeItem === '6' && <GeneratorInterface mediaType="video" generatorName="interpolate" />}
