@@ -4,7 +4,7 @@ import { eden } from "util/eden";
 
 interface ApiRequest extends NextApiRequest {
   body: {
-    creatorId: string
+    username: string
     generators: string[]
     earliestTime: number
     latestTime: number
@@ -13,7 +13,7 @@ interface ApiRequest extends NextApiRequest {
 }
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
-  const { creatorId, generators, earliestTime, latestTime, limit } = req.body
+  const { username, generators, earliestTime, latestTime, limit } = req.body
   const authToken = req.session.token
 
   if (!authToken) {
@@ -25,7 +25,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     // const userId = req.session.userId;
 
     const filter = {}
-    Object.assign(filter, creatorId ? { creatorId: creatorId } : {})
+    Object.assign(filter, username ? { username: username } : {})
     Object.assign(filter, generators ? { generators: generators } : {})
     Object.assign(filter, earliestTime ? { earliestTime: earliestTime } : {})
     Object.assign(filter, latestTime ? { latestTime: latestTime } : {})
