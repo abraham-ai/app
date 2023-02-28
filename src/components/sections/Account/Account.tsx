@@ -1,28 +1,33 @@
 import { Divider } from "antd";
-import React, {useState} from "react";
+import React, {useContext} from "react";
+import AppContext from 'context/AppContext'
+
+import { useAccount } from "wagmi";
 
 import EthereumAuth from "components/sections/Account/EthereumAuth";
 import MannaBalance from "components/sections/Account/MannaBalance";
 import ApiKeys from "components/sections/Account/ApiKeys";
 
 const AccountTab = () => {
-  const [isSignedIn, setIsSignedIn] = useState(false); 
-  
+  const { address, isConnected } = useAccount();
+  const { isSignedIn, setIsSignedIn } = useContext(AppContext);
+
   const handleSignIn = (signedIn: boolean) => {
     setIsSignedIn(signedIn);
   };
 
   return (
     <>
-      <EthereumAuth onSignIn={handleSignIn} />
-      {isSignedIn && (
+      {isConnected && isSignedIn && (
+        <h3>Signed in as {address}</h3>
+      )}
+      {isConnected && (
+        <EthereumAuth onSignIn={handleSignIn} />
+      )}
+      {isConnected && isSignedIn && (
         <>
           <Divider />
           <MannaBalance />
-        </>
-      )}
-      {isSignedIn && (
-        <>
           <Divider />
           <ApiKeys />
         </>

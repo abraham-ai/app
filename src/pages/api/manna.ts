@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    eden.setAuthToken(authToken);
+    // eden.setAuthToken(authToken);
     const result = await eden.getManna();
     
     if (result.error) {

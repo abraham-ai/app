@@ -17,7 +17,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    eden.setAuthToken(authToken);
+    // eden.setAuthToken(authToken);
     const result = await eden.getTaskStatus(taskId);
     if (result.error) {
       console.log("result.error found")

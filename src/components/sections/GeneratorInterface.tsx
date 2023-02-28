@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Form, Progress } from "antd";
 import { RightCircleOutlined, UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 import axios from "axios";
 
 import { useGeneratorInfo } from "hooks/useGeneratorInfo";
+import { useLoras } from "../../hooks/useLoras";
+
+import AppContext from 'context/AppContext'
+import { GeneratorState } from "context/AppContext";
 
 import ImageResult from "components/media/ImageResult";
 import VideoResult from "components/media/VideoResult";
@@ -20,18 +24,61 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   const [form] = Form.useForm();
   const width = Form.useWatch("width", form);
   const height = Form.useWatch("height", form);
-
   const [values, setValues] = useState({});
-  const [progress, setProgress] = useState<number>(0);
-  const [taskId, setTaskId] = useState<string>("");
-  const [creation, setCreation] = useState<any>(null);
-  const [generating, setGenerating] = useState<boolean>(false);
+  const { generators, setGenerators } = useContext(AppContext);
+  
+  const {
+    progress = 0,
+    taskId = "",
+    creation = null,
+    generating = false,
+  } = generators[generatorName] ?? {};
+
   const [error, setError] = useState<string | null>(null);
   const [showOptional, setShowOptional] = useState<boolean>(false);
-  const {versionId, requiredParameters, optionalParameters} = useGeneratorInfo(generatorName);
+  const {loras} = useLoras();
+  const { versionId, requiredParameters, optionalParameters } = useGeneratorInfo(generatorName);
 
   const allParameters = [...requiredParameters, ...optionalParameters];
-  
+
+  // overwrite any Lora parameters with the current list of Loras
+  if (loras) {
+    allParameters.forEach((parameter: any) => {
+      if (parameter.name === "lora") {
+        parameter.allowedValues = [
+          "(none)",
+          ...loras.map((lora: any) => lora.name)
+        ];
+      }
+    });
+  }
+
+  const setGenerator = (key: string, value: any) => {
+    setGenerators((prevGenerators: Record<string, GeneratorState>) => ({
+      ...prevGenerators,
+      [generatorName]: {
+        ...prevGenerators[generatorName],
+        [key]: value,
+      },
+    }));
+  };
+
+  const setProgress = (newProgress: number) => {
+    setGenerator("progress", newProgress);
+  };
+
+  const setTaskId = (newTaskId: string) => {
+    setGenerator("taskId", newTaskId);
+  };
+
+  const setCreation = (newCreation: any) => {
+    setGenerator("creation", newCreation);
+  };
+
+  const setGenerating = (newGenerating: boolean) => {
+    setGenerator("generating", newGenerating);
+  };
+
   const getConfig = (config: any) => {
     Object.keys(requiredParameters).forEach((key) => {
       const name = requiredParameters[key].name;
@@ -71,7 +118,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   }
 
   const pollForResult = async (taskId: string, pollingInterval: number = 2000) => {
-    let response = await axios.post("/api/fetch", {taskId: taskId});
+    let response = await axios.post("/api/fetch", { taskId: taskId });
     let task = response.data.task;
 
     while (
@@ -80,11 +127,10 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
       task.status == "running"
     ) {
       await new Promise((r) => setTimeout(r, pollingInterval));
-      response = await axios.post("/api/fetch", {taskId: taskId});
+      response = await axios.post("/api/fetch", { taskId: taskId });
       task = response.data.task;
-      setProgress(Math.floor(100*task.progress));
+      setProgress(Math.floor(100 * task.progress));
     }
-
     if (task.status == "failed") {
       throw new Error(task.error.message);
     } else if (!response.data.creation) {
@@ -100,7 +146,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
 
   useEffect(() => {
     const requestCreation = async (values: any) => {
-    
+
       setGenerating(true);
       setError(null);
 
@@ -119,9 +165,9 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         setTaskId(newTaskId);
         const creation = await pollForResult(newTaskId);
         setCreation(creation);
-      } 
+      }
       catch (error: any) {
-        console.log("THIS IS THE RROR")
+        console.log("Error: ")
         console.log(error)
         if (error.message) {
           setError(`Error: ${error.message}`);
@@ -129,7 +175,6 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           setError(`Error: ${error.response.data.error}`);
         }
       }
-
       setGenerating(false);
     };
 
@@ -138,12 +183,12 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
     }
 
   }, [values]);
-  
+
   const renderFormFields = (parameters: any) => {
     return Object.keys(parameters).map((key) => {
       return (
-        <div key={key} style={{paddingBottom: 5, marginBottom: 10, borderBottom: "1px solid #ccc"}}>
-          {parameters[key].allowedValues.length > 0 ? (
+        <div key={key} style={{ paddingBottom: 5, marginBottom: 10, borderBottom: "1px solid #ccc" }}>
+          {(parameters[key].allowedValues.length > 0 || parameters[key].allowedValuesFrom) ? (
             <OptionParameter key={key} form={form} parameter={parameters[key]} />
           ) : (
             <>
@@ -157,37 +202,37 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
                     <StringParameter key={key} form={form} parameter={parameters[key]} />
                   )}
                 </>
-              )}                  
+              )}
             </>
           )}
         </div>
       )
     });
   };
-  
+
   return (
     <div>
-      
-      <div style={{backgroundColor: "#eee", padding: 10, borderRadius: 10, marginBottom: 10, width: "90%"}}>
+
+      <div style={{ backgroundColor: "#eee", padding: 10, borderRadius: 10, marginBottom: 10, width: "90%" }}>
         <h2>/{generatorName}</h2>
-        <h3>version: <span style={{color: "gray"}}>{versionId}</span></h3>
+        <h3>version: <span style={{ color: "gray" }}>{versionId}</span></h3>
       </div>
 
-      <div style={{padding:10}}>
+      <div style={{ padding: 10 }}>
         <Form
           form={form}
           name="generate"
           onFinish={handleFinish}
         >
           {renderFormFields(requiredParameters)}
-          <h3 style={{padding: 5}}>
+          <h3 style={{ padding: 5 }}>
             {optionalParameters.length > 0 && (
               <>
-              {showOptional ? (
-                <Button onClick={() => setShowOptional(false)}><UpCircleOutlined/>Hide optional settings</Button>
-              ) : (
-                <Button onClick={() => setShowOptional(true)}><DownCircleOutlined/>Show optional settings</Button>
-              )}
+                {showOptional ? (
+                  <Button onClick={() => setShowOptional(false)}><UpCircleOutlined />Hide optional settings</Button>
+                ) : (
+                  <Button onClick={() => setShowOptional(true)}><DownCircleOutlined />Show optional settings</Button>
+                )}
               </>
             )}
           </h3>
@@ -195,7 +240,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           <Form.Item>
             <Button
               type="primary"
-              icon={<RightCircleOutlined />} 
+              icon={<RightCircleOutlined />}
               htmlType="submit"
               loading={generating}
               disabled={generating}
@@ -206,23 +251,23 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           </Form.Item>
         </Form>
 
-        <div id="result" style={{display: "flex", flexDirection: "row"}}>
-          <div id="resultLeft" style={{flexBasis: "auto", flexGrow: 0, padding: 10}}>
+        <div id="result" style={{ display: "flex", flexDirection: "row" }}>
+          <div id="resultLeft" style={{ flexBasis: "auto", flexGrow: 0, padding: 10 }}>
             {creation && creation.uri && (
               <>
-                {mediaType=="image" && <ImageResult resultUrl={creation.uri} width={width} height={height} />}
-                {mediaType=="video" && <VideoResult resultUrl={creation.uri} />}
-                {mediaType=="audio" && <AudioResult resultUrl={creation.uri} />}
-                {mediaType=="text" && <TextResult resultUrl={creation.uri} />}
+                {mediaType == "image" && <ImageResult resultUrl={creation.uri} width={width} height={height} />}
+                {mediaType == "video" && <VideoResult resultUrl={creation.uri} />}
+                {mediaType == "audio" && <AudioResult resultUrl={creation.uri} />}
+                {mediaType == "text" && <TextResult resultUrl={creation.uri} />}
               </>
             )}
           </div>
-          <div id="resultRight" style={{flexBasis: "auto", flexGrow: 1, padding: 10}}>
+          <div id="resultRight" style={{ flexBasis: "auto", flexGrow: 1, padding: 10 }}>
             {generating && <>
               {taskId && <h3>Task Id: {taskId}</h3>}
-              <Progress style={{width: "25%"}} percent={progress} />
+              <Progress style={{ width: "25%" }} percent={progress} />
             </>}
-            {error && <p style={{color: "red"}}>{error}</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
             {creation && creation.attributes && Object.keys(creation.attributes).length > 0 && (
               <>
                 <h3>Attributes</h3>
@@ -234,7 +279,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
                         {Array.isArray(creation.attributes[key]) ? (
                           <ul>
                             {creation.attributes[key].map((item: any) => {
-                              return <li key={item}>{item}<br/></li>;
+                              return <li key={item}>{item}<br /></li>;
                             })}
                           </ul>
                         ) : (

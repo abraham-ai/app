@@ -18,9 +18,11 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    eden.setAuthToken(authToken);
+    
+    // eden.setAuthToken(authToken);
     const result = await eden.startTask(generatorName, config);
     if (result.error) {
+      console.log(result.error)
       return res.status(500).json({ error: result.error });
     } 
     else {
@@ -28,6 +30,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
       return res.status(200).json({ taskId: result.taskId });
     }
   } catch (error: any) {
+    console.log(error);
     return res.status(500).json({ error: error.response.data });
   }
 };

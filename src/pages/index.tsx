@@ -1,28 +1,29 @@
+import React, { useCallback, useEffect, useContext } from 'react'
+import { useAccount } from 'wagmi'
+import AppContext from 'context/AppContext'
 import MainPageContent from "components/MainPageContent";
+import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import "antd/dist/reset.css";
-import { withSessionSsr } from "util/withSession";
 
-export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps({ req }) {
-    const token = req.session.token
-      ? req.session.token
-      : "";
+const Home: NextPage = () => {
+  const { isConnected } = useAccount()
+  const { setIsSignedIn } = useContext(AppContext);
 
-    return {
-      props: {
-        token,
-      },
-    };
-  }
-);
+  const checkAuthToken = useCallback(async () => {
+    const response = await axios.post('/api/user');
+    if (response.data.token) {
+      setIsSignedIn(true);
+    }    
+  }, [setIsSignedIn]);
 
-interface Props {
-  token?: string;
-}
+  useEffect(() => {
+    if (isConnected) {
+      checkAuthToken();
+    }
+  }, [checkAuthToken])
 
-const Home: NextPage = (props: Props) => {
   return (
     <div>
       <Head>

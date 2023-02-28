@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    eden.setAuthToken(authToken);
+    // eden.setAuthToken(authToken);
     const newApiKey = await eden.createNewApiKey(note);
     return res.status(200).json(newApiKey);
   } 

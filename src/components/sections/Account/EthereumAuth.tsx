@@ -12,7 +12,7 @@ const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
   const [ethAuthenticating, setEthAuthenticating] = useState(false);
-  const [ethMessage, setEthMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { signMessage } = useSignMessage({
     onSuccess: async (data, variables) => {
@@ -22,12 +22,11 @@ const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
           signature: data,
           userAddress: address,
         });
-        setEthMessage("Successfully authenticated as " + address);
         onSignIn(true);
       } catch (error: any) {
-        setEthMessage("Error authenticating");
+        setErrorMessage("Error authenticating");
         onSignIn(false);
-      }
+      }      
       setEthAuthenticating(false);
     },
   });
@@ -50,7 +49,7 @@ const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
         message: preparedMessage,
       });
     } catch (error: any) {
-      setEthMessage("Error authenticating");
+      setErrorMessage("Error authenticating");
       setEthAuthenticating(false);
     }
   };
@@ -59,7 +58,6 @@ const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
     <div>
       {isConnected && (
         <>
-          <h1>Sign in with Ethereum</h1>
           <Button
             type="primary"
             onClick={handleSiwe}
@@ -68,7 +66,7 @@ const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
           >
             Sign In
           </Button>
-          {ethMessage && <p>{ethMessage}</p>}
+          {errorMessage && <p style={{color: "red"}}>{errorMessage}</p>}
         </>
       )}
     </div>

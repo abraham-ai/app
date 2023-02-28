@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    eden.setAuthToken(authToken);
+    // eden.setAuthToken(authToken);
     const result = await eden.getApiKeys();
     return res.status(200).json({ apiKeys: result.apiKeys });
   } catch (error: any) {

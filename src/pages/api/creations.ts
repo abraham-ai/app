@@ -21,7 +21,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    eden.setAuthToken(authToken)
+    // eden.setAuthToken(authToken)
     // const userId = req.session.userId;
 
     const filter = {}

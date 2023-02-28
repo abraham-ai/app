@@ -10,7 +10,7 @@ const Profile = () => {
 
   const [form] = Form.useForm();
   const [creations, setCreations] = useState<object[]>([]);
-  const [generating, setGenerating] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
   const {profile} = useProfile();
   
@@ -24,7 +24,7 @@ const Profile = () => {
       if (!profile || !profile.username) {
         return;
       }
-      setGenerating(true);
+      setLoading(true);
       try {
         const response = await axios.post("/api/creations", {
           username: profile.username
@@ -45,10 +45,10 @@ const Profile = () => {
       } catch (error: any) {
         setMessage(`Error: ${error}`);
       }
-      setGenerating(false);
+      setLoading(false);
     };
     fetchCreations();
-  }, []);
+  }, [profile]);
 
   const handleConfigClick = (creation: any) => {
     setConfig(creation.config);
@@ -118,7 +118,7 @@ const Profile = () => {
     <>
       <Modal
         title="Configuration"
-        visible={configVisible}
+        open={configVisible}
         onOk={handleConfigModalOk}
         onCancel={handleConfigModalCancel}
       >
@@ -127,40 +127,17 @@ const Profile = () => {
 
       <Modal
         title="Result"
-        visible={resultVisible}
+        open={resultVisible}
         onOk={handleResultModalOk}
         onCancel={handleResultModalCancel}
       >
         <ImageResult resultUrl={result} />
       </Modal>
 
-      {/* <Form
-        form={form}
-        name="generate"
-        // initialValues={initialValues}
-        // onFinish={handleFetch}
-      >
-        <Space>
-          <Form.Item label="From" name="datefrom">
-            <DatePicker onChange={onChange} />
-          </Form.Item>
-          <Form.Item label="To" name="dateto">
-            <DatePicker onChange={onChange} />
-          </Form.Item>
-        </Space>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            loading={generating}
-            disabled={generating}
-          >
-            Get My Creations
-          </Button>
-        </Form.Item>
-      </Form> */}
       {message && <p>{message}</p>}
-      <Table dataSource={creations} columns={columns} />
+      {loading ? <p>Loading...</p> : <>
+        <Table dataSource={creations} columns={columns} />
+      </>}
     </>
   );
 };
