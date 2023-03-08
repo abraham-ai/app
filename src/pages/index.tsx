@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useContext } from 'react'
-import { useAccount } from 'wagmi'
-import AppContext from 'context/AppContext'
+import React, { useCallback, useEffect, useContext } from 'react';
+import { useAccount } from 'wagmi';
+import AppContext from 'context/AppContext';
 import MainPageContent from "components/MainPageContent";
 import axios from "axios";
 import type { NextPage } from "next";
@@ -9,13 +9,14 @@ import "antd/dist/reset.css";
 
 const Home: NextPage = () => {
   const { isConnected } = useAccount()
-  const { setIsSignedIn } = useContext(AppContext);
+  const { setIsSignedIn, setUsername } = useContext(AppContext);
 
   const checkAuthToken = useCallback(async () => {
     const response = await axios.post('/api/user');
     if (response.data.token) {
       setIsSignedIn(true);
-    }    
+      setUsername(response.data.username);
+    }
   }, [setIsSignedIn]);
 
   useEffect(() => {

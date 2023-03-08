@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button, Form, Progress } from "antd";
+import { Button, Form, Progress, Switch } from "antd";
 import { RightCircleOutlined, UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 import axios from "axios";
 
@@ -25,7 +25,8 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   const width = Form.useWatch("width", form);
   const height = Form.useWatch("height", form);
   const [values, setValues] = useState({});
-  const { generators, setGenerators } = useContext(AppContext);
+  const [allLoras, setAllLoras] = useState<boolean>(false);
+  const { generators, setGenerators, username } = useContext(AppContext);
   
   const {
     progress = 0,
@@ -36,12 +37,15 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
 
   const [error, setError] = useState<string | null>(null);
   const [showOptional, setShowOptional] = useState<boolean>(false);
-  const {loras} = useLoras();
+    
+  const userFilter = allLoras ? '' : username ?? '';
+  const {loras} = useLoras(userFilter);
+    
   const { versionId, requiredParameters, optionalParameters } = useGeneratorInfo(generatorName);
 
   const allParameters = [...requiredParameters, ...optionalParameters];
 
-  // overwrite any Lora parameters with the current list of Loras
+  // put Loras into the list of allowed values for the lora parameter
   if (loras) {
     allParameters.forEach((parameter: any) => {
       if (parameter.name === "lora") {
@@ -167,7 +171,6 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         setCreation(creation);
       }
       catch (error: any) {
-        console.log("Error: ")
         console.log(error)
         if (error.message) {
           setError(`Error: ${error.message}`);
@@ -188,6 +191,13 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
     return Object.keys(parameters).map((key) => {
       return (
         <div key={key} style={{ paddingBottom: 5, marginBottom: 10, borderBottom: "1px solid #ccc" }}>
+          {parameters[key].name == "lora" && (
+            <>
+              <Switch checked={allLoras} onChange={setAllLoras} />
+              &nbsp;&nbsp;Include all Loras
+            </>
+          )}
+
           {(parameters[key].allowedValues.length > 0 || parameters[key].allowedValuesFrom) ? (
             <OptionParameter key={key} form={form} parameter={parameters[key]} />
           ) : (

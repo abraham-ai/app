@@ -26,7 +26,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     }
 
     req.session.token = result.token;
-    req.session.userId = userAddress;
+    req.session.username = userAddress;
     await req.session.save();
 
     res.send({ message: `Successfully authenticated as ${userAddress}` });

@@ -9,9 +9,10 @@ function App({ Component, pageProps }: AppProps) {
   
   const [generators, setGenerators] = useState<Record<string, GeneratorState>>({});
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
 
   return (
-    <AppContext.Provider value={{ isSignedIn, setIsSignedIn, generators, setGenerators }}>
+    <AppContext.Provider value={{ isSignedIn, setIsSignedIn, username, setUsername, generators, setGenerators }}>
       <WalletProvider>
         <Component {...pageProps} />
       </WalletProvider>

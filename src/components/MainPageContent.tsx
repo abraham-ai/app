@@ -30,8 +30,6 @@ function getItem(
   } as MenuItem;
 }
 
-
-
 const MainPageContent = () => {
 
   const { address, isConnected } = useAccount();

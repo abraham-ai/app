@@ -19,8 +19,6 @@ const Player = () => {
   const getMoreCreations = async () =>{
     setLoading(true)
 
-    console.log("go!")
-
     try {
       let filter = {
         latestTime: cutoffTime,

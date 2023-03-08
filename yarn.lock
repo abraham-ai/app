@@ -2904,10 +2904,10 @@ eastasianwidth@^0.2.0:
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
-eden-sdk@^0.2.18:
-  version "0.2.18"
-  resolved "https://registry.yarnpkg.com/eden-sdk/-/eden-sdk-0.2.18.tgz#d9ad4cb08fb78ec3c2e7e1b865d1ca0f8cd0aa0c"
-  integrity sha512-9p2BclS6Ae6MOP54XPb7GojRaDrjzwjoMHQSBq9ouon53j7P1x2xG9YCMrrJsG85jdjlznqsIFL9V1sQmZOeXw==
+eden-sdk@^0.2.25:
+  version "0.2.25"
+  resolved "https://registry.yarnpkg.com/eden-sdk/-/eden-sdk-0.2.25.tgz#119ecbe4c2ebe64737376e886848125cb7927508"
+  integrity sha512-IfBBFxoHynjcSsmrWZiOJHwr5Mdav2IS+DSNWuHJ1nBIqEIGPWzH1Ikhi8l1MtJMrvo4NZcGK8S2pFJM31WuUw==
   dependencies:
     axios "^1.2.4"
     dotenv "^16.0.3"

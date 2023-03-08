@@ -29,13 +29,9 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
 
   const handleChange = (info: any) => {
     if (info.file.status === 'error') {
-      // Display an error message to the user
-      //message.error(`${info.file.name} failed to upload.`);
-      console.log("GOT AN ERROR")
-      console.log(info.file.name)
-      console.log("=-==-===")
-      console.log(info.file.error)
-      console.log("=-==-===!!!")
+      const fileList = [...info.fileList];
+      fileList.pop();
+      setFileList(fileList);
       message.error(`${info.file.name} failed to upload.`);
       return;
     }

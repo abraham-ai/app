@@ -1,9 +1,13 @@
 import useSWR from "swr";
 import { fetcher } from "util/fetcher";
 
-export const useLoras = () => {
+export const useLoras = (username: string) => {
+  const route = username 
+    ? `/api/loras?username=${username}` 
+    : `/api/loras`;
+
   const { data, error, isLoading, mutate } = useSWR(
-    "/api/loras",
+    route,
     fetcher
   );
   return {

@@ -1,10 +1,8 @@
-import { Modal, Button, Form, Table, DatePicker, Space } from "antd";
+import { Modal, Form, Table, Switch } from "antd";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import type { DatePickerProps } from 'antd';
 import { useProfile } from "hooks/useProfile";
 import ImageResult from "components/media/ImageResult";
-
 
 const Profile = () => {
 
@@ -19,6 +17,16 @@ const Profile = () => {
   const [config, setConfig] = useState<object>({});
   const [result, setResult] = useState<string>("");
   
+  const [create, setCreate] = useState<boolean>(false);
+  const [remix, setRemix] = useState<boolean>(false);
+  const [interpolate, setInterpolate] = useState<boolean>(false);
+  const [real2real, setReal2Real] = useState<boolean>(false);
+  const [tts, setTts] = useState<boolean>(false);
+  const [wav2lip, setWav2Lip] = useState<boolean>(false);
+  const [interrogate, setInterrogate] = useState<boolean>(false);
+  const [complete, setComplete] = useState<boolean>(false);
+  
+
   useEffect(() => {
     const fetchCreations = async () => {
       if (!profile || !profile.username) {
@@ -26,9 +34,11 @@ const Profile = () => {
       }
       setLoading(true);
       try {
-        const response = await axios.post("/api/creations", {
-          username: profile.username
-        });
+        const selectedGenerators = Object.entries({ create, remix, interpolate, real2real, tts, wav2lip, interrogate, complete }).filter(([key, value]) => value).map(([key, value]) => key);
+
+        const filter = {username: profile.username, generators: selectedGenerators};
+        
+        const response = await axios.post("/api/creations", filter);
         const data = response.data.creations &&
           response.data.creations.map((creation: any) => {
             return {
@@ -48,7 +58,7 @@ const Profile = () => {
       setLoading(false);
     };
     fetchCreations();
-  }, [profile]);
+  }, [profile, create, remix, interpolate, real2real, tts, wav2lip, interrogate, complete]);
 
   const handleConfigClick = (creation: any) => {
     setConfig(creation.config);
@@ -109,11 +119,7 @@ const Profile = () => {
       ),
     },
   ];
-  
-  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-    // console.log(date, dateString);
-  };
-  
+
   return (    
     <>
       <Modal
@@ -133,6 +139,15 @@ const Profile = () => {
       >
         <ImageResult resultUrl={result} />
       </Modal>
+
+      <Switch checked={create} checkedChildren="Create" unCheckedChildren="Create" defaultChecked onChange={(checked) => setCreate(checked)} />
+      <Switch checked={remix} onChange={(checked) => setRemix(checked)} />
+      <Switch checked={interpolate} onChange={(checked) => setInterpolate(checked)} />
+      <Switch checked={real2real} onChange={(checked) => setReal2Real(checked)} />
+      <Switch checked={tts} onChange={(checked) => setTts(checked)} />
+      <Switch checked={wav2lip} onChange={(checked) => setWav2Lip(checked)} />
+      <Switch checked={interrogate} onChange={(checked) => setInterrogate(checked)} />
+      <Switch checked={complete} onChange={(checked) => setComplete(checked)} />
 
       {message && <p>{message}</p>}
       {loading ? <p>Loading...</p> : <>
