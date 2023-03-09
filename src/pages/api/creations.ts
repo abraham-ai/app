@@ -14,6 +14,7 @@ interface ApiRequest extends NextApiRequest {
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const { username, generators, earliestTime, latestTime, limit } = req.body;
+  console.log("getCreations request: ", username, generators, earliestTime, latestTime, limit);
   const authToken = req.session.token;
 
   if (!authToken) {
@@ -30,8 +31,10 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     Object.assign(filter, earliestTime ? { earliestTime: earliestTime } : {})
     Object.assign(filter, latestTime ? { latestTime: latestTime } : {})
     Object.assign(filter, limit ? { limit: limit } : {})
-    console.log("filter", filter)
-    const creations = await eden.getCreations(filter)
+    
+    console.log("getCreations filter", filter);
+
+    const creations = await eden.getCreations(filter);
 
     return res.status(200).json({ creations: creations })
   } catch (error: any) {

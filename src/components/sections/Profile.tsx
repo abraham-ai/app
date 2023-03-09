@@ -36,7 +36,9 @@ const Profile = () => {
       try {
         const selectedGenerators = Object.entries({ create, remix, interpolate, real2real, tts, wav2lip, interrogate, complete }).filter(([key, value]) => value).map(([key, value]) => key);
 
-        const filter = {username: profile.username, generators: selectedGenerators};
+        const filter = {username: profile.username} //, generators: selectedGenerators};
+        
+        console.log("get creations filter:", filter);
         
         const response = await axios.post("/api/creations", filter);
         const data = response.data.creations &&
@@ -140,14 +142,21 @@ const Profile = () => {
         <ImageResult resultUrl={result} />
       </Modal>
 
-      <Switch checked={create} checkedChildren="Create" unCheckedChildren="Create" defaultChecked onChange={(checked) => setCreate(checked)} />
+      {/* <Switch checked={create} checkedChildren="Create" unCheckedChildren="Create" defaultChecked onChange={(checked) => setCreate(checked)} />
       <Switch checked={remix} onChange={(checked) => setRemix(checked)} />
       <Switch checked={interpolate} onChange={(checked) => setInterpolate(checked)} />
       <Switch checked={real2real} onChange={(checked) => setReal2Real(checked)} />
       <Switch checked={tts} onChange={(checked) => setTts(checked)} />
       <Switch checked={wav2lip} onChange={(checked) => setWav2Lip(checked)} />
       <Switch checked={interrogate} onChange={(checked) => setInterrogate(checked)} />
-      <Switch checked={complete} onChange={(checked) => setComplete(checked)} />
+      <Switch checked={complete} onChange={(checked) => setComplete(checked)} /> */}
+
+      <div>
+        <h3>debug</h3>
+        <ul>
+          <li>username: {profile?.username}</li>
+        </ul>
+      </div>
 
       {message && <p>{message}</p>}
       {loading ? <p>Loading...</p> : <>
