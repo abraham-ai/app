@@ -1,7 +1,7 @@
 import formidable from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSessionRoute } from "util/withSession";
-import { eden } from "util/eden";
+import { EdenClient } from 'eden-sdk';
 
 export const config = {
   api: {
@@ -24,7 +24,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return reject(error);
       }
       try {
-        // eden.setAuthToken(authToken);
+        const eden = new EdenClient();
+        eden.setAuthToken(authToken);
+    
         const file = files.file as formidable.File;
         const result = await eden.uploadFile(file.filepath);
         if (result.error) {

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSessionRoute } from "util/withSession";
-import { eden } from "util/eden";
+import { EdenClient } from 'eden-sdk';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const authToken = req.session.token;
@@ -10,9 +10,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    // eden.setAuthToken(authToken);
+    const eden = new EdenClient();
+    eden.setAuthToken(authToken);
+
     const result = await eden.getProfile();
-    
+
     if (result.error) {
       return res.status(500).json({ error: result.error });
     } else {

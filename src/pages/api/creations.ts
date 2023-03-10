@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSessionRoute } from "util/withSession";
-import { eden } from "util/eden";
+import { EdenClient } from 'eden-sdk';
 
 interface ApiRequest extends NextApiRequest {
   body: {
@@ -14,7 +14,6 @@ interface ApiRequest extends NextApiRequest {
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const { username, generators, earliestTime, latestTime, limit } = req.body;
-  console.log("getCreations request: ", username, generators, earliestTime, latestTime, limit);
   const authToken = req.session.token;
 
   if (!authToken) {
@@ -22,7 +21,9 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    // eden.setAuthToken(authToken)
+    const eden = new EdenClient();
+    eden.setAuthToken(authToken);
+
     // const username = req.session.username;
 
     const filter = {};

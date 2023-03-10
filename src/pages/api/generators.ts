@@ -1,11 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSessionRoute } from "util/withSession";
-import { eden } from "util/eden";
+import { EdenClient } from 'eden-sdk';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const generatorName = req.query.name as string;
     if (generatorName) {
+      const eden = new EdenClient();
       const generatorVersion = await eden.getGenerator(generatorName);
       return res.status(200).json({ generatorVersion: generatorVersion });
     }
@@ -14,7 +15,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }    
   } catch (error: any) {
     console.error(error);
-    //return res.status(500).json({ error: error.response.data });
     return res.status(500).json({ error: error.message });
   }
 };

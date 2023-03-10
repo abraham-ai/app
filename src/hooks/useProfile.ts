@@ -6,6 +6,9 @@ export const useProfile = () => {
     "/api/profile",
     fetcher
   );
+  if (data) {
+    console.log("useProfile", data?.profile);
+  }
   return {
     profile: data?.profile,
     isLoading,

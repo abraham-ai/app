@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSessionRoute } from "util/withSession";
-import { eden } from "util/eden";
-
+import { EdenClient } from 'eden-sdk';
 
 interface ApiRequest extends NextApiRequest {
   body: {
@@ -13,8 +12,12 @@ interface ApiRequest extends NextApiRequest {
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const { message, signature, userAddress } = req.body;
+  const authToken = req.session.token;
 
   try {
+    const eden = new EdenClient();
+    eden.setAuthToken(authToken);
+
     const result = await eden.loginEth(
       message, 
       signature, 
