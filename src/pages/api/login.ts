@@ -12,15 +12,9 @@ interface ApiRequest extends NextApiRequest {
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const { message, signature, userAddress } = req.body;
-  const authToken = req.session.token;
-
-  if (!authToken) {
-    return res.status(401).json({ error: "Not authenticated" });
-  }
 
   try {
     const eden = new EdenClient();
-    eden.setAuthToken(authToken);
 
     const result = await eden.loginEth(
       message, 
