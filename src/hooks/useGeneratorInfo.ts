@@ -9,6 +9,7 @@ export const useGeneratorInfo = (generatorName: any) => {
 
   if (isLoading || !data || error) {
     return {
+      description: '',
       versionId: 'loading',
       requiredParameters: [],
       optionalParameters: [],
@@ -27,7 +28,8 @@ export const useGeneratorInfo = (generatorName: any) => {
   );
 
   return {
-    versionId: data?.generatorVersion?.versionId,
+    description: data?.generatorVersion?.description || '',
+    versionId: data?.generatorVersion?.versionId || '',
     requiredParameters: requiredParameters || [],
     optionalParameters: optionalParameters || [],
     isLoading,

@@ -41,7 +41,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   const userFilter = allLoras ? '' : username ?? '';
   const {loras} = useLoras(userFilter);
     
-  const { versionId, requiredParameters, optionalParameters } = useGeneratorInfo(generatorName);
+  const { description, requiredParameters, optionalParameters } = useGeneratorInfo(generatorName);
 
   const allParameters = [...requiredParameters, ...optionalParameters];
 
@@ -225,7 +225,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
 
       <div style={{ backgroundColor: "#eee", padding: 10, borderRadius: 10, marginBottom: 10, width: "90%" }}>
         <h2>/{generatorName}</h2>
-        <h3>version: <span style={{ color: "gray" }}>{versionId}</span></h3>
+        <h3><span style={{ color: "gray" }}>{description}</span></h3>
       </div>
 
       <div style={{ padding: 10 }}>
@@ -265,7 +265,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           <div id="resultLeft" style={{ flexBasis: "auto", flexGrow: 0, padding: 10 }}>
             {creation && creation.uri && (
               <>
-                {mediaType == "image" && <ImageResult resultUrl={creation.uri} width={width} height={height} />}
+                {mediaType == "image" && <ImageResult resultUrl={creation.uri} />}
                 {mediaType == "video" && <VideoResult resultUrl={creation.uri} />}
                 {mediaType == "audio" && <AudioResult resultUrl={creation.uri} />}
                 {mediaType == "text" && <TextResult resultUrl={creation.uri} />}
@@ -274,8 +274,10 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           </div>
           <div id="resultRight" style={{ flexBasis: "auto", flexGrow: 1, padding: 10 }}>
             {generating && <>
-              {taskId && <h3>Task Id: {taskId}</h3>}
-              <Progress style={{ width: "25%" }} percent={progress} />
+              {taskId && <p><h3>Task Id: {taskId}</h3></p>}
+              {mediaType == "video" && <p><Progress style={{ width: "25%" }} percent={progress} /></p>}
+              <p><h4>{mediaType == "lora" ? "Training" : "Generating"}... it is safe to close this page.</h4></p>
+              {mediaType == "lora" && <p><h5 style={{color: "gray"}}>Note: no result is returned to this screen for LORA training. When training is done (~20 minutes from now), the LORA will become available in the other generators.</h5></p>}
             </>}
             {error && <p style={{ color: "red" }}>{error}</p>}
             {creation && creation.attributes && Object.keys(creation.attributes).length > 0 && (

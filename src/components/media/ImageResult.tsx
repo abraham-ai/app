@@ -2,18 +2,13 @@ import { Image } from "antd";
 
 const ImageResult = ({
   resultUrl,
-  width = undefined,
-  height = undefined,
 }: {
   resultUrl: string;
-  width?: number;
-  height?: number;
 }) => {
   return (
     <Image
       src={resultUrl}
-      width={width}
-      height={height}
+      style={{ width: "100%", height: "auto" }}
       alt="result"
       fallback="placeholder.png"
       preview={false}
