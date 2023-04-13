@@ -32,7 +32,9 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
       const fileList = [...info.fileList];
       fileList.pop();
       setFileList(fileList);
-      message.error(`${info.file.name} failed to upload.`);
+      console.log(info.file.response)
+      const errorMessage = info.file.response?.error || 'Unknown error occurred';
+      message.error(`${info.file.name} failed to upload because: ${errorMessage}.`);
       return;
     }
     setFileList(info.fileList);
@@ -42,6 +44,13 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
         isArray ? newUrls : newUrls[0] 
       });
       setUrls(newUrls);
+      console.log(`Image uploaded successfully. URL: ${info.file.response.fileUrl}`); 
+      message.success(
+        <>
+          Uploaded successfully{" "}
+          <a href={info.file.response.fileUrl}>[link]</a>.
+        </>
+      );     
     }
     if (info.file.status === 'removed') {
       const removedUrl = info.file.response.fileUrl;

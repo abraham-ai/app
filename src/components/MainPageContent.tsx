@@ -10,6 +10,7 @@ import AppContext from 'context/AppContext'
 
 import Account from "components/sections/Account";
 import Profile from "components/sections/Profile";
+import LiveMint from "components/LiveMint";
 import GeneratorInterface from "components/sections/GeneratorInterface"
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -35,12 +36,12 @@ const MainPageContent = () => {
   const { address, isConnected } = useAccount();
   const { isSignedIn, setIsSignedIn } = useContext(AppContext);
 
-
   const items: MenuItem[] = [
     getItem('User', 'sub1', <UserOutlined />, [
       getItem('My account', '1'),
       ...(isConnected && isSignedIn ? [
         getItem('My creations', '2'),
+        getItem('Mint', '3'),
       ] : []),
     ]),
     (isConnected && isSignedIn ?
@@ -91,6 +92,7 @@ const MainPageContent = () => {
         <Content style={{ margin: '0 16px', padding: "16px", background: colorBgContainer }}>       
           {activeItem === '1' && <Account />}
           {activeItem === '2' && <Profile />}
+          {activeItem === '3' && <LiveMint />}
           {activeItem === '5' && <GeneratorInterface mediaType="image" generatorName="create" />}
           {activeItem === '6' && <GeneratorInterface mediaType="video" generatorName="interpolate" />}
           {activeItem === '7' && <GeneratorInterface mediaType="video" generatorName="real2real" />}
