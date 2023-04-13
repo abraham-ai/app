@@ -41,7 +41,7 @@ const MainPageContent = () => {
       getItem('My account', '1'),
       ...(isConnected && isSignedIn ? [
         getItem('My creations', '2'),
-        getItem('Mint', '3'),
+        // getItem('Mint', '3'),
       ] : []),
     ]),
     (isConnected && isSignedIn ?
