@@ -43,7 +43,7 @@ const MainPageContent = () => {
       ...(isConnected && isSignedIn ? [
         getItem('My creations', '2'),
         // getItem('Mint', '3'),
-        getItem('Voice2Image', '3'),
+        getItem('Voice2Image', '4'),
       ] : []),
     ]),
     (isConnected && isSignedIn ?
