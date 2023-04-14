@@ -32,6 +32,9 @@ RUN yarn build
 
 # Production image, copy all the files and run next
 FROM node:16-alpine AS runner
+
+RUN apk add --no-cache ffmpeg
+
 WORKDIR /app
 
 ENV NODE_ENV production
