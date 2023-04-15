@@ -28,17 +28,22 @@ const Voice2Image = () => {
   };
 
   const sendAudio = async () => {
+    console.log("Send audio 1")
     setLoading(true);
-
+    console.log("Send audio 2")
     const data = new FormData();
     data.append("file", audioBlob as Blob);
     data.append("model", "whisper-1");
     data.append("language", "en");
+    console.log("Send audio 3")
 
     const res = await fetch("/api/whisper", {
       method: "POST",
       body: data,
     });
+
+    console.log("Send audio 4")
+    console.log(res);
 
     const result = await res.json();
     console.log(result);
