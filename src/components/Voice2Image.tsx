@@ -37,6 +37,9 @@ const Voice2Image = () => {
     data.append("language", "en");
     console.log("Send audio 3")
 
+    console.log("the data")
+    console.log(data);
+
     const res = await fetch("/api/whisper", {
       method: "POST",
       body: data,
