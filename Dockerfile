@@ -1,7 +1,7 @@
 # Install dependencies only when needed
 FROM node:16-alpine AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat git ffmpeg
+RUN apk add --no-cache libc6-compat git
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
@@ -33,7 +33,10 @@ RUN yarn build
 # Production image, copy all the files and run next
 FROM node:16-alpine AS runner
 
+# Install ffmpeg in the runner stage
 RUN apk add --no-cache ffmpeg
+
+RUN apk add --no-cache
 
 WORKDIR /app
 
