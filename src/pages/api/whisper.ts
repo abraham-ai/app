@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import FormData from "form-data";
 import formidable from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
 import { exec } from "child_process";
@@ -124,7 +125,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         
         console.log("DID THIS WORK???")
-        
+
         resolve({ text: result.text });
 
 
