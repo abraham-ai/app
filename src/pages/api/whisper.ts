@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import FormData from "form-data";
+// import FormDataNode from 'form-data';
+import fetch from "node-fetch";
 import formidable from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
 import { exec } from "child_process";
@@ -101,7 +103,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         console.log("whsip 1")
 
         const data = new FormData();
-        data.append("file", new Blob([buffer], { type: "audio/wav" }), "test.wav");
+        // data.append("file", new Blob([buffer], { type: "audio/wav" }), "test.wav");
+        data.append('file', fs.createReadStream(file.filepath), "test.wav");
         data.append("model", "whisper-1");
         data.append("language", "en");
 

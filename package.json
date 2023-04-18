@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^0.8.1",
+    "@types/form-data": "^2.5.0",
+    "@types/node-fetch": "^2.6.3",
     "antd": "^5.0.7",
     "axios": "^1.2.1",
     "dotenv": "^16.0.3",
