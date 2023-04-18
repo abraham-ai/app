@@ -12,9 +12,8 @@ const Voice2Image = () => {
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [creation, setCreation] = useState<any>(null);
   //const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | Recorder>(null);
+  // const mediaRecorderRef = useRef<Recorder>(null);
   const [recorderInstance, setRecorderInstance] = useState<Recorder | null>(null);
-
 
 
   const startRecording = () => {
@@ -28,6 +27,7 @@ const Voice2Image = () => {
       setRecording(true);
     });
   };
+  
   
   const stopRecording = async () => {
     if (recorderInstance) {
@@ -136,28 +136,8 @@ const Voice2Image = () => {
     }
     // gptCompletion(convertedText);
     requestCreation(convertedText);
-
   }, [convertedText]);
 
-  const handleDataAvailable = (event: BlobEvent) => {
-    setAudioBlob(event.data);
-  };
-
-  const handleStop = () => {
-    const mediaRecorder = mediaRecorderRef.current;
-    if (mediaRecorder) {
-      mediaRecorder.removeEventListener("dataavailable", handleDataAvailable);
-      mediaRecorder.removeEventListener("stop", handleStop);
-    }
-  };
-
-  if (recording) {
-    const mediaRecorder = mediaRecorderRef.current;
-    if (mediaRecorder) {
-      mediaRecorder.addEventListener("dataavailable", handleDataAvailable);
-      mediaRecorder.addEventListener("stop", handleStop);
-    }
-  }
 
   return (
     <div>
