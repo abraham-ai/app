@@ -76,11 +76,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
           console.log("whisper 10, result")
           console.log(response)
-          console.log(response.json())
+          
+
 
           const result = await response.json();
+          
+          console.log("======")
           console.log(result);
-
+          console.log("======")
           
 
           resolve({ text: result.text });
