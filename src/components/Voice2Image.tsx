@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button, Space } from "antd";
 import axios from "axios";
+import Recorder from 'recorder-js';
 import ImageResult from "components/media/ImageResult";
 
 
@@ -10,23 +11,33 @@ const Voice2Image = () => {
   const [recording, setRecording] = useState<boolean>(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [creation, setCreation] = useState<any>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  //const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | Recorder>(null);
+  const [recorderInstance, setRecorderInstance] = useState<Recorder | null>(null);
+
+
 
   const startRecording = () => {
     const constraints = { audio: true };
     navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.start();
-      mediaRecorderRef.current = mediaRecorder;
+      const audioContext = new AudioContext();
+      const recorder = new Recorder(audioContext);
+      recorder.init(stream);
+      recorder.start();
+      setRecorderInstance(recorder);
       setRecording(true);
     });
   };
-
-  const stopRecording = () => {
-    mediaRecorderRef.current?.stop();
-    setRecording(false);
+  
+  const stopRecording = async () => {
+    if (recorderInstance) {
+      const { blob } = await recorderInstance.stop();
+      setAudioBlob(blob);
+      setRecording(false);
+    }
   };
-
+  
+  
   const sendAudio = async () => {
     console.log("Send audio 1")
     setLoading(true);
