@@ -10,7 +10,7 @@ const MannaBalance = () => {
         <p style={{color: "red"}}>{error}</p>
       )}
       {manna && (
-        <p>{`You have ${manna} manna`}</p>
+        <p>{`You have ${manna.toLocaleString("en-us")} manna`}</p>
       )}
     </>
   );

@@ -28,7 +28,6 @@ const Voice2Image = () => {
     });
   };
   
-  
   const stopRecording = async () => {
     if (recorderInstance) {
       const { blob } = await recorderInstance.stop();

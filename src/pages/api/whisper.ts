@@ -1,11 +1,11 @@
 import fs from "fs";
-import path from "path";
+// import path from "path";
 import FormData from "form-data";
 // import FormDataNode from 'form-data';
 import fetch from "node-fetch";
 import formidable from "formidable";
 import { NextApiRequest, NextApiResponse } from "next";
-import { exec } from "child_process";
+// import { exec } from "child_process";
 
 export const config = {
   api: {
@@ -111,6 +111,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         console.log("whsip 2")
 
         const OPENAI_API_KEY = process.env.LM_OPENAI_API_KEY;
+        
         const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
           headers: {
             Authorization: `Bearer ${OPENAI_API_KEY}`,
