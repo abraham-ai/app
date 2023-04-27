@@ -1,5 +1,5 @@
-import EdenLivemintContract from "../../../eden-provenance/contracts/out/EdenLivemint.sol/EdenLivemint.json";
-import BroadcastGoerli from "../../../eden-provenance/contracts/broadcast/Deploy.s.sol/5/run-latest.json";
+import EdenLivemintContract from "eden-livemint/out/EdenLivemint.sol/EdenLivemint.json";
+import BroadcastGoerli from "eden-livemint/broadcast/Deploy.s.sol/5/run-latest.json";
 
 const getContractAddress = (contractName: string) => {
   const chain = process.env.NEXT_PUBLIC_BLOCKCHAIN_ENV;
