@@ -3,15 +3,15 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { PropsWithChildren } from "react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mainnet } from "wagmi/chains";
+import { goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, provider } = configureChains(
-  [mainnet],
+  [goerli],
   [
     alchemyProvider({
-      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_GOERLI as string,
     }),
     publicProvider(),
   ]
@@ -28,7 +28,7 @@ const wagmiClient = createClient({
   provider,
 });
 
-const WalletProvider = ({ children }: PropsWithChildren) => {
+const WalletProviderGoerli = ({ children }: PropsWithChildren) => {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
@@ -36,4 +36,4 @@ const WalletProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export default WalletProvider;
+export default WalletProviderGoerli;
