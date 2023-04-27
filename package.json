@@ -16,7 +16,7 @@
     "antd": "^5.0.7",
     "axios": "^1.2.1",
     "dotenv": "^16.0.3",
-    "eden-livemint": "../eden-provenance/contracts",
+    "eden-livemint": "^1.0.0",
     "eden-sdk": "^0.2.34",
     "ethers": "^5.7.2",
     "form-data": "^4.0.0",
