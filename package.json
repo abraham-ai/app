@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@prb/foundry-template": "../eden-provenance/contracts",
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@types/form-data": "^2.5.0",
     "@types/node-fetch": "^2.6.3",
