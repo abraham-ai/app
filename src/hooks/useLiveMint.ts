@@ -5,6 +5,7 @@ import { getMerkleProof } from "util/merkle";
 const useLiveMint = () => {
   console.log("contract address", contracts.LiveMint.address);
   const { address } = useAccount();
+  console.log("my address", address)
   const merkleProof = getMerkleProof(address || undefined);
   console.log("mmm", merkleProof);
   const { config, error } = usePrepareContractWrite({

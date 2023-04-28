@@ -863,12 +863,6 @@
     tiny-glob "^0.2.9"
     tslib "^2.4.0"
 
-"@prb/foundry-template@../eden-provenance/contracts":
-  version "1.0.0"
-  dependencies:
-    ethers "^6.3.0"
-    merkletreejs "^0.3.10"
-
 "@rainbow-me/rainbowkit@^0.8.1":
   version "0.8.1"
   resolved "https://registry.npmjs.org/@rainbow-me/rainbowkit/-/rainbowkit-0.8.1.tgz"
@@ -2938,10 +2932,10 @@ eastasianwidth@^0.2.0:
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
-eden-livemint@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/eden-livemint/-/eden-livemint-1.0.0.tgz#f7ba6bf125c4104b1f26f90b6d108878ad7e1541"
-  integrity sha512-Mr5x0NibN5MQdKlbwMvZYh0VqYCDpGQWpCW4OffBEmeo60+l6CygPiewNYL8zLbNa6DCutE2xkjaai/kVojveA==
+eden-contracts@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/eden-contracts/-/eden-contracts-0.1.0.tgz#ad0f5d91b26aefb8e7bd864d4c403688a8ec9132"
+  integrity sha512-g1xIczg+r7T+BDxQYAwX/dmx3zZBRnnX/Cs0KzT0tbqi3mwL37OJyGj0vj5ZPk0IODP0rNbC9HeA/t1Ej2Pqdw==
   dependencies:
     ethers "^6.3.0"
     merkletreejs "^0.3.10"
