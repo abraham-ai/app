@@ -13,8 +13,8 @@ const LiveMint = () => {
   
   const { mints, error, mutate } = useMints();
 
-console.log("mints")
-console.log(mints);
+  console.log("mints")
+  console.log(mints);
 
 
   const [balance, setBalance] = React.useState<BigNumber | undefined>(
