@@ -1,23 +1,24 @@
-import React, { useState } from "react";
-import { Button } from "antd";
+import React from "react";
+import { useWaitForTransaction } from "wagmi";
+import useLiveMint from "../hooks/useLiveMint";
 
 const LiveMint = () => {
-  
-  const [loading, setLoading] = useState<boolean>(false)
+  const { data, write } = useLiveMint();
+  const { isLoading } = useWaitForTransaction({
+    hash: data?.hash,
+  });
 
-  const mint = async () =>{
-    setLoading(true)
-
-    console.log("minting!")
-    await new Promise(r => setTimeout(r, 5000));
-
-    setLoading(false);
-  }
+  const onMintButtonClicked = () => {
+    console.log(write);
+    write?.();
+  };
 
   return (
     <>
-      {loading ? <p>loading...</p> : null}
-      <Button onClick={mint}>Mint</Button>
+      <h4>Eden Livemint</h4>
+      <button onClick={onMintButtonClicked} disabled={isLoading}>
+        Claim Token
+      </button>
     </>
   );
 };
