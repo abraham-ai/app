@@ -4,7 +4,7 @@ import { RightCircleOutlined, UpCircleOutlined, DownCircleOutlined } from '@ant-
 import axios from "axios";
 
 import { useGeneratorInfo } from "hooks/useGeneratorInfo";
-import { useLoras } from "../../hooks/useLoras";
+import { useLoras } from "hooks/useLoras";
 import { useMannaBalance } from "hooks/useMannaBalance";
 
 import AppContext from 'context/AppContext'

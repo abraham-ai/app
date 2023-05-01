@@ -4,7 +4,6 @@ import { GeneratorState } from "context/AppContext";
 import AppContext from "context/AppContext";
 import "styles/globals.css";
 import WalletProvider from "providers/WalletProvider";
-import WalletProviderGoerli from "providers/WalletProvider/WalletProviderGoerli";
 
 function App({ Component, pageProps }: AppProps) {
   const [generators, setGenerators] = useState<Record<string, GeneratorState>>(
@@ -24,9 +23,9 @@ function App({ Component, pageProps }: AppProps) {
         setGenerators,
       }}
     >
-      <WalletProviderGoerli>
+      <WalletProvider>
         <Component {...pageProps} />
-      </WalletProviderGoerli>
+      </WalletProvider>
     </AppContext.Provider>
   );
 }

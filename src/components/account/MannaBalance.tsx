@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
 import { useMannaBalance } from "hooks/useMannaBalance";
 
-const Manna = () => {
+const MannaBalance = () => {
 
   const { error, manna, mutate } = useMannaBalance();
 
@@ -17,4 +16,4 @@ const Manna = () => {
   );
 };
 
-export default Manna;
+export default MannaBalance;

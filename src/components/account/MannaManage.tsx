@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useMannaBalance } from "hooks/useMannaBalance";
 import { Button, message} from "antd";
 
-const MannaBalance = () => {
+const MannaManage = () => {
   const { error, manna, mutate } = useMannaBalance();
   const [loading, setLoading] = useState(false);
 
@@ -53,4 +53,4 @@ const MannaBalance = () => {
   );
 };
 
-export default MannaBalance;
+export default MannaManage;

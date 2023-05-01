@@ -4,9 +4,9 @@ import AppContext from 'context/AppContext'
 
 import { useAccount } from "wagmi";
 
-import EthereumAuth from "components/sections/Account/EthereumAuth";
-import MannaBalance from "components/sections/Account/MannaBalance";
-import ApiKeys from "components/sections/Account/ApiKeys";
+import EthereumAuth from "components/account/EthereumAuth";
+import MannaManage from "components/account/MannaManage";
+import ApiKeys from "components/account/ApiKeys";
 
 const AccountTab = () => {
   const { address, isConnected } = useAccount();
@@ -27,7 +27,7 @@ const AccountTab = () => {
       {isConnected && isSignedIn && (
         <>
           <Divider />
-          <MannaBalance />
+          <MannaManage />
           <Divider />
           <ApiKeys />
         </>

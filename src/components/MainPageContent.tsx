@@ -8,12 +8,11 @@ import type { MenuProps } from "antd";
 import { useAccount } from "wagmi";
 import AppContext from "context/AppContext";
 
-import Account from "components/sections/Account";
-import Profile from "components/sections/Profile";
-import Manna from "components/sections/Manna";
-import LiveMint from "components/LiveMint";
+import Account from "components/account/Account";
+import MannaBalance from "components/account/MannaBalance";
+import Profile from "components/Profile";
 import Voice2Image from "components/Voice2Image";
-import GeneratorInterface from "components/sections/GeneratorInterface";
+import GeneratorInterface from "components/GeneratorInterface";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -42,12 +41,15 @@ const MainPageContent = () => {
       getItem('My account', '1'),
       ...(isConnected && isSignedIn ? [
         getItem('My creations', '2'),
-        getItem('Mint', '3'),
-        getItem('Voice2Image', '4'),
       ] : []),
     ]),
     isConnected && isSignedIn
-      ? getItem("App", "sub2", <ToolOutlined />, [
+      ? getItem("Apps", "sub2", <ToolOutlined />, [
+          getItem('Voice2Image', '3'),
+        ])
+      : null,
+    isConnected && isSignedIn
+      ? getItem("Generators", "sub2", <ToolOutlined />, [
           getItem("Create", "5"),
           getItem("Interpolate", "6"),
           getItem("Real2Real", "7"),
@@ -106,7 +108,7 @@ const MainPageContent = () => {
           alignItems: "center",
           justifyContent: "space-between"
         }}>
-          {(isConnected && isSignedIn) && <Manna />}
+          {(isConnected && isSignedIn) && <MannaBalance />}
           <ConnectButton />
         </Header>
         <Content
@@ -118,8 +120,7 @@ const MainPageContent = () => {
         >
           {activeItem === "1" && <Account />}
           {activeItem === "2" && <Profile />}
-          {activeItem === "3" && <LiveMint />}
-          {activeItem === "4" && <Voice2Image />}
+          {activeItem === "3" && <Voice2Image />}
 
           {activeItem === "5" && (
             <GeneratorInterface mediaType="image" generatorName="create" />
@@ -148,7 +149,6 @@ const MainPageContent = () => {
           {activeItem === "13" && (
             <GeneratorInterface mediaType="text" generatorName="complete" />
           )}
-          {activeItem === "14" && <LiveMint />}
         </Content>
         <Footer style={{ textAlign: "center" }}></Footer>
       </Layout>
