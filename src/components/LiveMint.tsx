@@ -19,6 +19,13 @@ const LiveMint = () => {
       <button onClick={onMintButtonClicked} disabled={isLoading}>
         Claim Token
       </button>
+      {/* <div>
+        {mints?.map((mint: any) => (
+          <div key={mint._id} style={{margin: 20}}>
+            <img src={mint.imageUri} width="300" />
+          </div>
+        ))}
+      </div> *}
     </>
   );
 };

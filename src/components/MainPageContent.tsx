@@ -10,6 +10,7 @@ import AppContext from "context/AppContext";
 
 import Account from "components/sections/Account";
 import Profile from "components/sections/Profile";
+import Manna from "components/sections/Manna";
 import LiveMint from "components/LiveMint";
 import Voice2Image from "components/Voice2Image";
 import GeneratorInterface from "components/sections/GeneratorInterface";
@@ -37,15 +38,13 @@ const MainPageContent = () => {
   const { isSignedIn, setIsSignedIn } = useContext(AppContext);
 
   const items: MenuItem[] = [
-    getItem("User", "sub1", <UserOutlined />, [
-      getItem("My account", "1"),
-      ...(isConnected && isSignedIn
-        ? [
-            getItem("My creations", "2"),
-            // getItem('Mint', '3'),
-            getItem("Voice2Image", "4"),
-          ]
-        : []),
+    getItem('User', 'sub1', <UserOutlined />, [
+      getItem('My account', '1'),
+      ...(isConnected && isSignedIn ? [
+        getItem('My creations', '2'),
+        getItem('Mint', '3'),
+        getItem('Voice2Image', '4'),
+      ] : []),
     ]),
     isConnected && isSignedIn
       ? getItem("App", "sub2", <ToolOutlined />, [
@@ -58,9 +57,6 @@ const MainPageContent = () => {
           getItem("TTS", "11"),
           getItem("Wav2Lip", "12"),
           getItem("Complete", "13"),
-          process.env.NEXT_PUBLIC_BLOCKCHAIN_ENV === "goerli"
-            ? getItem("LiveMint", "14")
-            : null,
         ])
       : null,
   ];
@@ -86,14 +82,11 @@ const MainPageContent = () => {
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
-        <div
-          style={{
-            height: 32,
-            margin: 16,
-            background: "rgba(255, 255, 255, 0.2)",
-          }}
-        />
-
+        <a href="https://eden.art">
+          <center>
+            <img src="logo192.png" style={{width: "66.6%"}}/>
+          </center>
+        </a>
         <Menu
           theme="dark"
           defaultSelectedKeys={["1"]}
@@ -104,14 +97,16 @@ const MainPageContent = () => {
         />
       </Sider>
       <Layout className="site-layout">
-        <Header
-          style={{
-            padding: 16,
-            background: colorBgContainer,
-            marginLeft: "auto",
-            marginRight: 20,
-          }}
-        >
+        <Header style={{ 
+          padding: 16, 
+          background: colorBgContainer, 
+          marginLeft: "auto", 
+          marginRight: 20,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}>
+          {(isConnected && isSignedIn) && <Manna />}
           <ConnectButton />
         </Header>
         <Content

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button, Form, Progress, Switch } from "antd";
+import { Button, Form, Progress, Switch, Modal } from "antd";
 import { RightCircleOutlined, UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 import axios from "axios";
 
 import { useGeneratorInfo } from "hooks/useGeneratorInfo";
 import { useLoras } from "../../hooks/useLoras";
+import { useMannaBalance } from "hooks/useMannaBalance";
 
 import AppContext from 'context/AppContext'
 import { GeneratorState } from "context/AppContext";
@@ -26,8 +27,20 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   const height = Form.useWatch("height", form);
   const [values, setValues] = useState({});
   const [allLoras, setAllLoras] = useState<boolean>(false);
-  const { generators, setGenerators, username } = useContext(AppContext);
-  
+  const {generators, setGenerators, username} = useContext(AppContext);
+  const {manna, mutate: updateManna} = useMannaBalance();
+  const [updatedManna, setUpdatedManna] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    if (updatedManna !== null && manna === 0) {
+      setUpdatedManna(true);
+      setIsModalVisible(true);
+    } else {
+      setUpdatedManna(false);
+    }
+  }, [manna]);
+
   const {
     progress = 0,
     taskId = "",
@@ -112,7 +125,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         }
       }
       if (param.maxLength) {
-        if (values[v].length >= param.maxLength) {
+        if (values[v].length > param.maxLength) {
           setError(`Error: ${v} must have no more than ${param.maxLength} elements`);
           return false;
         }
@@ -167,16 +180,13 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         });
         const newTaskId = response.data.taskId;
         setTaskId(newTaskId);
+        updateManna();
         const creation = await pollForResult(newTaskId);
         setCreation(creation);
+        updateManna();
       }
       catch (error: any) {
-        console.log(error)
-        if (error.message) {
-          setError(`Error: ${error.message}`);
-        } else {
-          setError(`Error: ${error.response.data.error}`);
-        }
+        setError(`Error: ${error.response.data.error}`);
       }
       setGenerating(false);
     };
@@ -191,13 +201,6 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
     return Object.keys(parameters).map((key) => {
       return (
         <div key={key} style={{ paddingBottom: 5, marginBottom: 10, borderBottom: "1px solid #ccc" }}>
-          {parameters[key].name == "lora" && (
-            <>
-              <Switch checked={allLoras} onChange={setAllLoras} />
-              &nbsp;&nbsp;Include all Loras
-            </>
-          )}
-
           {(parameters[key].allowedValues.length > 0 || parameters[key].allowedValuesFrom) ? (
             <OptionParameter key={key} form={form} parameter={parameters[key]} />
           ) : (
@@ -215,6 +218,12 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
               )}
             </>
           )}
+          {parameters[key].name == "lora" && (
+            <>
+              <Switch checked={allLoras} onChange={setAllLoras} />
+              &nbsp;&nbsp;Include all Loras
+            </>
+          )}
         </div>
       )
     });
@@ -222,7 +231,15 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
 
   return (
     <div>
-
+      <Modal
+        title="You are out of Manna"
+        open={isModalVisible}
+        onOk={() => setIsModalVisible(false)}
+        okText="Amen"
+        cancelButtonProps={{ style: { display: "none" } }}
+      >
+        To get more Manna, come to the next Miracle. See <a href="https://discord.gg/4dSYwDT"><u>Discord</u></a> for details.
+      </Modal>
       <div style={{ backgroundColor: "#eee", padding: 10, borderRadius: 10, marginBottom: 10, width: "90%" }}>
         <h2>/{generatorName}</h2>
         <h3><span style={{ color: "gray" }}>{description}</span></h3>

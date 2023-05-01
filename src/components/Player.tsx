@@ -2,9 +2,9 @@ import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { Button } from "antd";
 import ImageResult from "components/media/ImageResult";
-import VideoResult from "components/media/VideoResult";
-import AudioResult from "components/media/AudioResult";
-import TextResult from "components/media/TextResult";
+// import VideoResult from "components/media/VideoResult";
+// import AudioResult from "components/media/AudioResult";
+// import TextResult from "components/media/TextResult";
 
 
 const Player = () => {
