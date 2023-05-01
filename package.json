@@ -16,7 +16,7 @@
     "axios": "^1.2.1",
     "dotenv": "^16.0.3",
     "eden-contracts": "^1.0.3",
-    "eden-sdk": "^0.2.34",
+    "eden-sdk": "^0.2.39",
     "ethers": "^5.7.2",
     "form-data": "^4.0.0",
     "iron-session": "^6.3.1",
