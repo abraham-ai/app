@@ -25,7 +25,7 @@ const LiveMint = () => {
             <img src={mint.imageUri} width="300" />
           </div>
         ))}
-      </div> *}
+      </div> */}
     </>
   );
 };
