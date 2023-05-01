@@ -2932,10 +2932,10 @@ eastasianwidth@^0.2.0:
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
-eden-contracts@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/eden-contracts/-/eden-contracts-0.1.0.tgz#ad0f5d91b26aefb8e7bd864d4c403688a8ec9132"
-  integrity sha512-g1xIczg+r7T+BDxQYAwX/dmx3zZBRnnX/Cs0KzT0tbqi3mwL37OJyGj0vj5ZPk0IODP0rNbC9HeA/t1Ej2Pqdw==
+eden-contracts@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/eden-contracts/-/eden-contracts-1.0.3.tgz#cbcb7166631c6d951f59a8f57cd21ba1aef3efe2"
+  integrity sha512-e4kIEUgNaMIhAACgsrnYoFZZiRl/Yct6N6u6FiRwRF287apyNjcK+js0gbdTfhVF1WyDWW7nAJgDJ+zOwkAE+w==
   dependencies:
     ethers "^6.3.0"
     merkletreejs "^0.3.10"
