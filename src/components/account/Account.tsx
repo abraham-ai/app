@@ -16,21 +16,26 @@ const AccountTab = () => {
     setIsSignedIn(signedIn);
   };
 
+  if (!isConnected) {
+    return null;
+  }
+
   return (
     <>
-      {isConnected && isSignedIn && (
-        <h3>Signed in as {address}</h3>
-      )}
-      {isConnected && (
-        <EthereumAuth onSignIn={handleSignIn} />
-      )}
-      {isConnected && isSignedIn && (
-        <>
+      {isSignedIn ? (
+        <div>
+          <h3>Signed in as {address}</h3>
           <Divider />
           <MannaManage />
           <Divider />
           <ApiKeys />
-        </>
+        </div>
+      ) : (
+        <div>
+          <p>Eden uses a signature to verify that you are the owner of this wallet.</p>
+          <p>Please sign-in to get your account details.</p>
+          <EthereumAuth onSignIn={handleSignIn} />
+        </div>
       )}
     </>
   );

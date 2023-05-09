@@ -32,53 +32,78 @@ function getItem(
   } as MenuItem;
 }
 
-const MainPageContent = () => {
-  const { address, isConnected } = useAccount();
-  const { isSignedIn, setIsSignedIn } = useContext(AppContext);
+
+
+const WelcomePage = () => {
+
+  return (
+    <Layout style={{ minHeight: "100vh", alignItems: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh", minWidth: "50vh", maxHeight: "100vh", maxWidth: "100vw", textAlign: "center" }}>
+        <div style={{ textAlign: "center" }}>
+          <center>
+            <a href="https://eden.art">
+              <img src="logo192.png" style={{width: "75%"}}/>  
+            </a>
+            <h1>Welcome to Eden</h1>
+            <div style={{color: "#666"}}>
+              <h3>
+                To learn more about Eden, visit <a href="https://eden.art">the homepage</a>.
+              </h3>
+            </div>
+            <div style={{color: "#666"}}>
+              <h3>To use the app, please connect your wallet.</h3>
+              <div style={{ textAlign: "center", margin: "auto", width: "40%"}}>
+                <ConnectButton />
+              </div>
+            </div>
+          </center>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+
+const ConnectedPage = () => {
+
+  const [collapsed, setCollapsed] = useState(false);
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+  const {token: { colorBgContainer }} = theme.useToken();
 
   const items: MenuItem[] = [
     getItem('User', 'sub1', <UserOutlined />, [
       getItem('My account', '1'),
-      ...(isConnected && isSignedIn ? [
-        getItem('My creations', '2'),
-      ] : []),
+      getItem('My creations', '2'),
+    ]),    
+    getItem("Apps", "sub2", <ToolOutlined />, [
+      getItem('Voice2Image', '3'),
     ]),
-    isConnected && isSignedIn
-      ? getItem("Apps", "sub2", <ToolOutlined />, [
-          getItem('Voice2Image', '3'),
-        ])
-      : null,
-    isConnected && isSignedIn
-      ? getItem("Generators", "sub2", <ToolOutlined />, [
-          getItem("Create", "5"),
-          getItem("Interpolate", "6"),
-          getItem("Real2Real", "7"),
-          getItem("Remix", "8"),
-          getItem("Interrogate", "9"),
-          getItem("Lora train", "10"),
-          getItem("TTS", "11"),
-          getItem("Wav2Lip", "12"),
-          getItem("Complete", "13"),
-        ])
-      : null,
+    getItem("Generators", "sub2", <ToolOutlined />, [
+      getItem("Create", "5"),
+      getItem("Interpolate", "6"),
+      getItem("Real2Real", "7"),
+      getItem("Remix", "8"),
+      getItem("Interrogate", "9"),
+      getItem("Lora train", "10"),
+      getItem("TTS", "11"),
+      getItem("Wav2Lip", "12"),
+      getItem("Complete", "13"),
+    ])
   ];
-
-  const [collapsed, setCollapsed] = useState(false);
-  const [activeItem, setActiveItem] = useState<string | null>(null);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
 
   const handleMenuClick = (e: any) => {
     setActiveItem(e.key);
   };
 
+  // set to number 1 by default
   useEffect(() => {
-    setActiveItem("1");
-  }, [setActiveItem]);
+    if (activeItem === null) {
+      setActiveItem("1");
+    }
+  }, [activeItem]);
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <>
       <Sider
         collapsible
         collapsed={collapsed}
@@ -108,7 +133,7 @@ const MainPageContent = () => {
           alignItems: "center",
           justifyContent: "space-between"
         }}>
-          {(isConnected && isSignedIn) && <MannaBalance />}
+          <MannaBalance />
           <ConnectButton />
         </Header>
         <Content
@@ -152,6 +177,33 @@ const MainPageContent = () => {
         </Content>
         <Footer style={{ textAlign: "center" }}></Footer>
       </Layout>
+    </>
+  );
+};
+
+
+const MainPageContent = () => {
+  const { isConnected } = useAccount();
+  const [isMounted, setIsMounted] = useState(false);
+  const [connected, setConnected] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      setConnected(isConnected);
+    }
+  }, [isConnected, isMounted]);
+
+  return (
+    <Layout style={{ minHeight: "100vh" }}>
+      {connected ? (
+        <ConnectedPage />
+      ) : (
+        <WelcomePage />
+      )}
     </Layout>
   );
 };
