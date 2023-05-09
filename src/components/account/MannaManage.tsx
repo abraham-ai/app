@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useMannaBalance } from "hooks/useMannaBalance";
 import { Button, message} from "antd";
+import { useAccount } from "wagmi";
 
 const MannaManage = () => {
+  const { isConnected } = useAccount();
   const { error, manna, mutate } = useMannaBalance();
   const [loading, setLoading] = useState(false);
 

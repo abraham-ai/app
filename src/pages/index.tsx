@@ -13,7 +13,7 @@ const Home: NextPage = () => {
 
   const checkAuthToken = useCallback(async () => {
     try {
-      const response = await axios.post('/api/user');
+      const response = await axios.post('/api/user', {userAddress: address});
       if (response.data.token && response.data.address == address) {
         setIsSignedIn(true);
         setUsername(response.data.username);

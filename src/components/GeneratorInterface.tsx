@@ -10,6 +10,9 @@ import { useMannaBalance } from "hooks/useMannaBalance";
 import AppContext from 'context/AppContext'
 import { GeneratorState } from "context/AppContext";
 
+import { SiweMessage } from "siwe";
+import { useAccount, useNetwork, useSignMessage } from "wagmi";
+
 import ImageResult from "components/media/ImageResult";
 import VideoResult from "components/media/VideoResult";
 import AudioResult from "components/media/AudioResult";
@@ -22,6 +25,9 @@ import SliderParameter from "components/parameters/SliderParameter";
 
 
 const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: string, mediaType: string }) => {
+  const { isSignedIn, setIsSignedIn } = useContext(AppContext);
+  const { chain } = useNetwork();
+  const { address } = useAccount();
   const [form] = Form.useForm();
   const width = Form.useWatch("width", form);
   const height = Form.useWatch("height", form);
@@ -31,6 +37,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   const {manna, mutate: updateManna} = useMannaBalance();
   const [updatedManna, setUpdatedManna] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { signMessageAsync } = useSignMessage();
 
   useEffect(() => {
     if (updatedManna !== null && manna === 0) {
@@ -120,18 +127,15 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
       const param = allParameters.find((parameter: any) => parameter.name === v);
       if (param.minLength) {
         if (values[v].length < param.minLength) {
-          setError(`Error: ${v} must have at least ${param.minLength} elements`);
-          return false;
+          throw new Error(`${v} must have at least ${param.minLength} elements`);
         }
       }
       if (param.maxLength) {
         if (values[v].length > param.maxLength) {
-          setError(`Error: ${v} must have no more than ${param.maxLength} elements`);
-          return false;
+          throw new Error(`${v} must have no more than ${param.maxLength} elements`);
         }
       }
     }
-    return true;
   }
 
   const pollForResult = async (taskId: string, pollingInterval: number = 2000) => {
@@ -163,16 +167,35 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
 
   useEffect(() => {
     const requestCreation = async (values: any) => {
-
-      setGenerating(true);
       setError(null);
 
-      if (!validateConfig(values)) {
-        setGenerating(false);
-        return;
-      }
-
       try {
+        validateConfig(values);
+
+        if (!isSignedIn) {
+          const message = new SiweMessage({
+            domain: window.location.host,
+            address,
+            statement: "Sign in with Ethereum to the app.",
+            uri: window.location.origin,
+            version: "1",
+            chainId: chain?.id,
+            nonce: Date.now().toString(),
+          });
+          const preparedMessage = message.prepareMessage();
+          const signature = await signMessageAsync({
+            message: preparedMessage
+          });
+          await axios.post("/api/login", {
+            message: preparedMessage,
+            signature: signature,
+            address: address,
+          });
+          setIsSignedIn(true);
+        }
+
+        setGenerating(true);        
+
         const config = getConfig(values);
         const response = await axios.post("/api/generate", {
           generatorName: generatorName,
@@ -181,14 +204,18 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         const newTaskId = response.data.taskId;
         setTaskId(newTaskId);
         updateManna();
+        
         const creation = await pollForResult(newTaskId);
         setCreation(creation);
         updateManna();
+
+        setGenerating(false);
+      
+      } catch (error: any) {
+        setError(`Error: ${error.response?.data?.error || error.message || "Error authenticating"}`);
+        setGenerating(false);
+        return;
       }
-      catch (error: any) {
-        setError(`Error: ${error.response.data.error}`);
-      }
-      setGenerating(false);
     };
 
     if (Object.keys(values).length > 0) {
@@ -291,9 +318,9 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           </div>
           <div id="resultRight" style={{ flexBasis: "auto", flexGrow: 1, padding: 10 }}>
             {generating && <>
-              {taskId && <p><h3>Task Id: {taskId}</h3></p>}
+              {taskId && <h3>Task Id: {taskId}</h3>}
               {mediaType == "video" && <p><Progress style={{ width: "25%" }} percent={progress} /></p>}
-              <p><h4>{mediaType == "lora" ? "Training" : "Generating"}... it is safe to close this page.</h4></p>
+              <p>{mediaType == "lora" ? "Training" : "Generating"}... it is safe to close this page.</p>
               {mediaType == "lora" && <p><h5 style={{color: "gray"}}>Note: no result is returned to this screen for LORA training. When training is done (~20 minutes from now), the LORA will become available in the other generators.</h5></p>}
             </>}
             {error && <p style={{ color: "red" }}>{error}</p>}

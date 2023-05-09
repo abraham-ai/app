@@ -5,7 +5,7 @@ import { SiweMessage } from "siwe";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 
 type EthereumAuthProps = {
-  onSignIn: (signedIn: boolean) => void; // Specify the type of the onSignIn prop
+  onSignIn: (signedIn: boolean) => void; 
 }
 
 const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
