@@ -34,7 +34,7 @@ const StringParameter = (props: {form: any, parameter: any}) => {
               message: `${props.parameter.label} required`
             }]}
           >
-            <>
+            <div>
               {values.map((value, index) => (
                 <Row key={index}>
                   <Col span={10}>
@@ -69,7 +69,7 @@ const StringParameter = (props: {form: any, parameter: any}) => {
                   </Button>
                 </Col>
               </Row>
-            </>
+            </div>
           </Form.Item>
           <Row>
             <Col>
