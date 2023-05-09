@@ -16,6 +16,7 @@
     "axios": "^1.2.1",
     "dotenv": "^16.0.3",
     "eden-sdk": "^0.2.39",
+    "ethereumjs-abi": "https://registry.npmjs.org/ethereumjs-abi/-/ethereumjs-abi-0.6.8.tgz",
     "ethers": "^5.7.2",
     "form-data": "^4.0.0",
     "iron-session": "^6.3.1",
