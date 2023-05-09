@@ -8,16 +8,22 @@ import Head from "next/head";
 import "antd/dist/reset.css";
 
 const Home: NextPage = () => {
-  const { isConnected } = useAccount()
+  const { address, isConnected } = useAccount()
   const { setIsSignedIn, setUsername } = useContext(AppContext);
 
   const checkAuthToken = useCallback(async () => {
-    const response = await axios.post('/api/user');
-    if (response.data.token) {
-      setIsSignedIn(true);
-      setUsername(response.data.username);
+    try {
+      const response = await axios.post('/api/user', {userAddress: address});
+      if (response.data.token && response.data.address == address) {
+        setIsSignedIn(true);
+        setUsername(response.data.username);
+      } else {
+        setIsSignedIn(false);
+      }
+    } catch (error: any) {
+      setIsSignedIn(false);
     }
-  }, [setIsSignedIn]);
+  }, [setIsSignedIn, address]);
 
   useEffect(() => {
     if (isConnected) {

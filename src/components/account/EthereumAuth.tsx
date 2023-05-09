@@ -20,7 +20,7 @@ const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
         await axios.post("/api/login", {
           message: variables.message,
           signature: data,
-          userAddress: address,
+          address: address,
         });
         onSignIn(true);
       } catch (error: any) {

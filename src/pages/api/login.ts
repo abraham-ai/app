@@ -6,12 +6,12 @@ interface ApiRequest extends NextApiRequest {
   body: {
     message: string;
     signature: string;
-    userAddress: string;
+    address: string;
   };
 }
 
 const handler = async (req: ApiRequest, res: NextApiResponse) => {
-  const { message, signature, userAddress } = req.body;
+  const { message, signature, address } = req.body;
 
   try {
     const eden = new EdenClient();
@@ -19,7 +19,7 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     const result = await eden.loginEth(
       message, 
       signature, 
-      userAddress
+      address
     );
 
     if (result.error) {
@@ -27,10 +27,13 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
     }
 
     req.session.token = result.token;
-    req.session.username = userAddress;
+    req.session.userId = result.userId;
+    req.session.username = result.username;
+    req.session.address = address;
+    
     await req.session.save();
 
-    res.send({ message: `Successfully authenticated as ${userAddress}` });
+    res.send({ message: `Successfully authenticated as ${address}` });
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ error: "Error authenticating key pair" });

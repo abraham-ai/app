@@ -78,7 +78,7 @@ const ConnectedPage = () => {
     getItem("Apps", "sub2", <ToolOutlined />, [
       getItem('Voice2Image', '3'),
     ]),
-    getItem("Generators", "sub2", <ToolOutlined />, [
+    getItem("Generators", "sub3", <ToolOutlined />, [
       getItem("Create", "5"),
       getItem("Interpolate", "6"),
       getItem("Real2Real", "7"),
