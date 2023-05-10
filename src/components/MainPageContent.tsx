@@ -117,7 +117,7 @@ const ConnectedPage = () => {
         <Menu
           theme="dark"
           defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1", "sub2"]}
+          defaultOpenKeys={["sub1", "sub2", "sub3"]}
           mode="inline"
           items={items}
           onClick={handleMenuClick}
