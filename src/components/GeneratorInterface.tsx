@@ -125,6 +125,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         continue;
       }
       const param = allParameters.find((parameter: any) => parameter.name === v);
+
       if (param.minLength) {
         if (values[v].length < param.minLength) {
           throw new Error(`${v} must have at least ${param.minLength} elements`);
@@ -169,8 +170,12 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
     const requestCreation = async (values: any) => {
       setError(null);
 
-      try {
+      try {        
         validateConfig(values);
+        
+        if (values.seed) {
+          values.seed = parseInt(values.seed);
+        } 
 
         if (!isSignedIn) {
           const message = new SiweMessage({
@@ -212,7 +217,12 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         setGenerating(false);
       
       } catch (error: any) {
-        setError(`Error: ${error.response?.data?.error || error.message || "Error authenticating"}`);
+        const errorMessage = error.response?.data?.error || error.message || "Error authenticating";
+        if (errorMessage == "Not enough manna") {
+          setIsModalVisible(true);
+        }
+
+        setError(`Error: ${errorMessage}`);
         setGenerating(false);
         return;
       }
@@ -259,7 +269,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   return (
     <div>
       <Modal
-        title="You are out of Manna"
+        title={manna == 0 ? "You are out of Manna" : "You do not have enough Manna to create this"}
         open={isModalVisible}
         onOk={() => setIsModalVisible(false)}
         okText="Amen"
@@ -319,9 +329,9 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           <div id="resultRight" style={{ flexBasis: "auto", flexGrow: 1, padding: 10 }}>
             {generating && <>
               {taskId && <h3>Task Id: {taskId}</h3>}
-              {mediaType == "video" && <p><Progress style={{ width: "25%" }} percent={progress} /></p>}
+              {mediaType == "video" && <h4><Progress style={{ width: "25%" }} percent={progress} /></h4>}
               <p>{mediaType == "lora" ? "Training" : "Generating"}... it is safe to close this page.</p>
-              {mediaType == "lora" && <p><h5 style={{color: "gray"}}>Note: no result is returned to this screen for LORA training. When training is done (~20 minutes from now), the LORA will become available in the other generators.</h5></p>}
+              {mediaType == "lora" && <h5 style={{color: "gray"}}>Note: no result is returned to this screen for LORA training. When training is done (~20 minutes from now), the LORA will become available in the other generators.</h5>}
             </>}
             {error && <p style={{ color: "red" }}>{error}</p>}
             {creation && creation.attributes && Object.keys(creation.attributes).length > 0 && (
