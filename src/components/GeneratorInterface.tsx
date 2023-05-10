@@ -198,7 +198,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           const signature = await signMessageAsync({
             message: preparedMessage
           });
-          await axios.post("/api/login", {
+          const result = await axios.post("/api/login", {
             message: preparedMessage,
             signature: signature,
             address: address,

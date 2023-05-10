@@ -6,10 +6,9 @@ import "styles/globals.css";
 import WalletProvider from "providers/WalletProvider";
 
 function App({ Component, pageProps }: AppProps) {
-  const [generators, setGenerators] = useState<Record<string, GeneratorState>>(
-    {}
-  );
+  const [generators, setGenerators] = useState<Record<string, GeneratorState>>({});
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isNewUser, setIsNewUser] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
 
   return (
@@ -17,6 +16,8 @@ function App({ Component, pageProps }: AppProps) {
       value={{
         isSignedIn,
         setIsSignedIn,
+        isNewUser,
+        setIsNewUser,
         username,
         setUsername,
         generators,

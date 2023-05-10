@@ -2,7 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import React, { useState, useContext, useEffect } from "react";
 import { ToolOutlined, UserOutlined } from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu, Modal, theme } from "antd";
 import type { MenuProps } from "antd";
 
 import { useAccount } from "wagmi";
@@ -65,7 +65,7 @@ const WelcomePage = () => {
 
 
 const ConnectedPage = () => {
-
+  const { isNewUser, setIsNewUser } = useContext(AppContext);
   const [collapsed, setCollapsed] = useState(false);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const {token: { colorBgContainer }} = theme.useToken();
@@ -104,6 +104,17 @@ const ConnectedPage = () => {
 
   return (
     <>
+      <Modal
+        title="Welcome"
+        open={isNewUser}
+        onOk={() => setIsNewUser(false)}
+        onCancel={() => setIsNewUser(false)}
+        okText="Amen"
+        closable={false}
+        cancelButtonProps={{ style: { display: "none" } }}
+      >
+        A new traveler has arrived to Eden. You have been granted 1,000 Manna. Welcome to the Garden of Artificial Delights!
+      </Modal>
       <Sider
         collapsible
         collapsed={collapsed}

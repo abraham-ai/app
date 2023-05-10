@@ -1,14 +1,17 @@
 import { Button } from "antd";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import AppContext from "context/AppContext";
 import { SiweMessage } from "siwe";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 
 type EthereumAuthProps = {
-  onSignIn: (signedIn: boolean) => void; 
+  onSignIn: (signedIn: boolean) => void;
+  buttonText: string; 
 }
 
-const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
+const EthereumAuth = ({ onSignIn, buttonText }: EthereumAuthProps) => {
+  const { setIsNewUser } = useContext(AppContext);
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
   const [ethAuthenticating, setEthAuthenticating] = useState(false);
@@ -17,11 +20,14 @@ const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
   const { signMessage } = useSignMessage({
     onSuccess: async (data, variables) => {
       try {
-        await axios.post("/api/login", {
+        const result = await axios.post("/api/login", {
           message: variables.message,
           signature: data,
           address: address,
         });
+        if (result.data.newUser) {
+          setIsNewUser(true);
+        }
         onSignIn(true);
       } catch (error: any) {
         setErrorMessage("Error authenticating");
@@ -65,7 +71,7 @@ const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
             disabled={ethAuthenticating}
             loading={ethAuthenticating}
           >
-            Sign In
+            {buttonText}
           </Button>
           {errorMessage && <p style={{color: "red"}}>{errorMessage}</p>}
         </>
