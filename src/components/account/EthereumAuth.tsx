@@ -35,14 +35,15 @@ const EthereumAuth = ({ onSignIn }: EthereumAuthProps) => {
     if (!isConnected) return;
     setEthAuthenticating(true);
     try {
+      const nonce = await fetch('/api/nonce');
       const message = new SiweMessage({
         domain: window.location.host,
         address,
-        statement: "Sign in with Ethereum to the app.",
+        statement: 'Sign in to Eden with Ethereum.',
         uri: window.location.origin,
-        version: "1",
+        version: '1',
         chainId: chain?.id,
-        nonce: Date.now().toString(),
+        nonce: await nonce.text(),
       });
       const preparedMessage = message.prepareMessage();
       await signMessage({

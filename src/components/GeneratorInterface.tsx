@@ -175,17 +175,24 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         
         if (values.seed) {
           values.seed = parseInt(values.seed);
-        } 
+        }
+
+        if (values.interpolation_seeds) {
+          values.interpolation_seeds = values.interpolation_seeds.map(
+            (seed: any) => parseInt(seed.toString())
+          );
+        }
 
         if (!isSignedIn) {
+          const nonce = await fetch('/api/nonce');
           const message = new SiweMessage({
             domain: window.location.host,
             address,
-            statement: "Sign in with Ethereum to the app.",
+            statement: 'Sign in to Eden with Ethereum.',
             uri: window.location.origin,
-            version: "1",
+            version: '1',
             chainId: chain?.id,
-            nonce: Date.now().toString(),
+            nonce: await nonce.text(),
           });
           const preparedMessage = message.prepareMessage();
           const signature = await signMessageAsync({

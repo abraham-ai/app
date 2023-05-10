@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSessionRoute } from "util/withSession";
+import { SiweMessage } from 'siwe'
 import { EdenClient } from 'eden-sdk';
 
 interface ApiRequest extends NextApiRequest {
@@ -14,6 +15,12 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
   const { message, signature, address } = req.body;
 
   try {
+    const siweMessage = new SiweMessage(message);
+		const fields = await siweMessage.validate(signature);
+		if (fields.nonce !== req.session.nonce) {
+			return res.status(422).json({ error: "Invalid nonce" });
+		}
+
     const eden = new EdenClient();
 
     const result = await eden.loginEth(

@@ -11,6 +11,7 @@ declare module "iron-session" {
     userId?: string;
     username?: string;
     address?: string;
+    nonce?: string;
   }
 }
 
