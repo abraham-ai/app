@@ -25,7 +25,7 @@ const AccountTab = () => {
       {isSignedIn ? (
         <div>
           <h3>Signed in as {address}</h3>
-          <EthereumAuth onSignIn={handleSignIn} buttonText="Sign In Again" />
+          <EthereumAuth onSignIn={handleSignIn} isButton={false} />
           <Divider />
           <MannaManage />
           <Divider />
@@ -35,7 +35,7 @@ const AccountTab = () => {
         <div>
           <p>Eden uses a signature to verify that you are the owner of this wallet.</p>
           <p>Please sign-in to get your account details.</p>
-          <EthereumAuth onSignIn={handleSignIn} buttonText="Sign In" />
+          <EthereumAuth onSignIn={handleSignIn} isButton={true} />
         </div>
       )}
     </>

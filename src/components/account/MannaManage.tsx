@@ -4,9 +4,15 @@ import { Button, message} from "antd";
 import { useAccount } from "wagmi";
 
 const MannaManage = () => {
-  const { isConnected } = useAccount();
+  const {address, isConnected } = useAccount();
   const { error, manna, mutate } = useMannaBalance();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isConnected) {
+      mutate();
+    }
+  }, [isConnected]);
 
   const handleDepositManna = async () => {
     setLoading(true);

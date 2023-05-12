@@ -4,8 +4,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { ToolOutlined, UserOutlined } from "@ant-design/icons";
 import { Layout, Menu, Modal, theme } from "antd";
 import type { MenuProps } from "antd";
-
+import axios from "axios";
 import { useAccount } from "wagmi";
+
 import AppContext from "context/AppContext";
 
 import Account from "components/account/Account";
@@ -31,7 +32,6 @@ function getItem(
     label,
   } as MenuItem;
 }
-
 
 
 const WelcomePage = () => {
@@ -195,6 +195,7 @@ const ConnectedPage = () => {
 
 const MainPageContent = () => {
   const { isConnected } = useAccount();
+  const { setIsSignedIn } = useContext(AppContext);
   const [isMounted, setIsMounted] = useState(false);
   const [connected, setConnected] = useState(false);
   
@@ -207,6 +208,15 @@ const MainPageContent = () => {
       setConnected(isConnected);
     }
   }, [isConnected, isMounted]);
+
+  useEffect(() => {
+    console.log("isConnected changed !!", isConnected);
+    if (!isConnected) {
+      console.log("isConnected is false");
+      axios.post("/api/logout");
+      setIsSignedIn(false);
+    }
+  }, [isConnected]);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
