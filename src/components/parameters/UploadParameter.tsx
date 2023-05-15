@@ -1,10 +1,15 @@
 import { Form, Row, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 import { Modal, Upload } from 'antd';
 import type { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/es/upload/interface';
+
+import AppContext from 'context/AppContext'
+import axios from "axios";
+import { SiweMessage } from "siwe";
+import { useAccount, useNetwork, useSignMessage } from "wagmi";
 
 
 const getBase64 = (file: RcFile): Promise<string> =>
@@ -24,6 +29,11 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [urls, setUrls] = useState<string[]>([]);
 
+  const { chain } = useNetwork();
+  const { address } = useAccount();
+  const { isSignedIn, setIsSignedIn } = useContext(AppContext);
+  const { signMessageAsync } = useSignMessage();
+
   const isArray = Array.isArray(props.parameter.default);
   const maxUploads = isArray ? (props.parameter.maxLength || 3) : 1;
 
@@ -32,7 +42,6 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
       const fileList = [...info.fileList];
       fileList.pop();
       setFileList(fileList);
-      console.log(info.file.response)
       const errorMessage = info.file.response?.error || 'Unknown error occurred';
       message.error(`${info.file.name} failed to upload because: ${errorMessage}.`);
       return;
@@ -70,6 +79,39 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
     setPreviewOpen(true);
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
   }
+
+  const handleBeforeUpload = async (file: RcFile) => {
+    if (!isSignedIn) {
+      try {
+        const nonce = await fetch('/api/nonce');
+        const message = new SiweMessage({
+          domain: window.location.host,
+          address,
+          statement: 'Sign in to Eden with Ethereum.',
+          uri: window.location.origin,
+          version: '1',
+          chainId: chain?.id,
+          nonce: await nonce.text(),
+        });
+        const preparedMessage = message.prepareMessage();
+        const signature = await signMessageAsync({
+          message: preparedMessage
+        });
+        const result = await axios.post("/api/login", {
+          message: preparedMessage,
+          signature: signature,
+          address: address,
+        });
+        setIsSignedIn(true);
+        return true;
+      } catch (error: any) {
+        message.error('You must be signed in to upload files.');
+        return false;
+      }
+    }
+    message.error('You must be signed in to upload files.');
+    return false;
+  };
   
   return (
     <>
@@ -91,6 +133,7 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
             // multiple={isArray}
             onChange={handleChange}
             onPreview={handlePreview}
+            beforeUpload={handleBeforeUpload}
           >
             {fileList.length >= maxUploads ? null : (
               <div>
