@@ -125,7 +125,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         continue;
       }
       const param = allParameters.find((parameter: any) => parameter.name === v);
-
+      
       if (param.minLength) {
         if (values[v].length < param.minLength) {
           throw new Error(`${v} must have at least ${param.minLength} elements`);
@@ -154,7 +154,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
       setProgress(Math.floor(100 * task.progress));
     }
     if (task.status == "failed") {
-      throw new Error(task.error.message);
+      throw new Error(task.error);
     } else if (!response.data.creation) {
       throw new Error("No creation found");
     };
@@ -170,9 +170,10 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
     const requestCreation = async (values: any) => {
       setError(null);
 
-      try {        
+      // validate config and convert seeds to integers
+      try {
         validateConfig(values);
-        
+
         if (values.seed) {
           values.seed = parseInt(values.seed);
         }
@@ -224,11 +225,10 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
         setGenerating(false);
       
       } catch (error: any) {
-        const errorMessage = error.response?.data?.error || error.message || "Error authenticating";
+        const errorMessage = error.response?.data?.error || error.message || error.toString();
         if (errorMessage == "Not enough manna") {
           setIsModalVisible(true);
         }
-
         setError(`Error: ${errorMessage}`);
         setGenerating(false);
         return;
