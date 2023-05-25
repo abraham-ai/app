@@ -45,7 +45,10 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
       props.form.setFieldsValue({ [props.parameter.name]: 
         isArray ? urls : urls[0] 
       });
-      const errorMessage = info.file.response?.error || 'Unknown error occurred';
+      let errorMessage = info.file.response?.error || 'Unknown error occurred';
+      if (errorMessage.startsWith("options.maxFileSize")) {
+        errorMessage = "20MB file size limit exceeded";
+      }
       message.error(`${info.file.name} failed to upload because: ${errorMessage}.`);
       return;
     }
