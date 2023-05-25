@@ -22,7 +22,6 @@ const handler = async (req: ApiRequest, res: NextApiResponse) => {
 
     const result = await eden.getTaskStatus(taskId);
     if (result.error) {
-      console.log(result.error)
       return res.status(500).json({ error: result.error });
     } 
     else {
