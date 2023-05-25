@@ -142,7 +142,6 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
   const pollForResult = async (taskId: string, pollingInterval: number = 2000) => {
     let response = await axios.post("/api/fetch", { taskId: taskId });
     let task = response.data.task;
-
     while (
       task.status == "pending" ||
       task.status == "starting" ||
@@ -170,7 +169,6 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
     const requestCreation = async (values: any) => {
       setError(null);
 
-      // validate config and convert seeds to integers
       try {
         validateConfig(values);
 
@@ -199,7 +197,7 @@ const GeneratorInterface = ({ generatorName, mediaType }: { generatorName: strin
           const signature = await signMessageAsync({
             message: preparedMessage
           });
-          const result = await axios.post("/api/login", {
+          await axios.post("/api/login", {
             message: preparedMessage,
             signature: signature,
             address: address,

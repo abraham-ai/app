@@ -17,7 +17,6 @@ const EthereumAuth = ({ onSignIn, isButton }: EthereumAuthProps) => {
   const { address, isConnected } = useAccount();
   const [ethAuthenticating, setEthAuthenticating] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  
 
   const { signMessage } = useSignMessage({
     onSuccess: async (data, variables) => {
