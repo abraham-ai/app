@@ -42,6 +42,9 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
       const fileList = [...info.fileList];
       fileList.pop();
       setFileList(fileList);
+      props.form.setFieldsValue({ [props.parameter.name]: 
+        isArray ? urls : urls[0] 
+      });
       const errorMessage = info.file.response?.error || 'Unknown error occurred';
       message.error(`${info.file.name} failed to upload because: ${errorMessage}.`);
       return;
@@ -53,7 +56,6 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
         isArray ? newUrls : newUrls[0] 
       });
       setUrls(newUrls);
-      console.log(`Image uploaded successfully. URL: ${info.file.response.fileUrl}`); 
       message.success(
         <>
           Uploaded successfully{" "}
@@ -109,8 +111,7 @@ const UploadParameter = (props: {form: any, parameter: any}) => {
         return false;
       }
     }
-    message.error('You must be signed in to upload files.');
-    return false;
+    return true;
   };
   
   return (
